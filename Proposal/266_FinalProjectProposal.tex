@@ -28,7 +28,7 @@
 
 \addbibresource{bibliography.bib} % BibLaTeX bibliography file
 
-\runninghead{Final Project} % A shortened article title to appear in the running head, leave this command empty for no running head
+\runninghead{Manipulative Language Detection in LLM-Crafted Phishing Attacks} % A shortened article title to appear in the running head, leave this command empty for no running head
 
 \footertext{\textit{Final Project} (MICS/DATSCI 266, Summer 2025)} % Text to appear in the footer, leave this command empty for no footer text
 
@@ -54,7 +54,7 @@ Phishing Attacks
 	Karl-Johan Westhoff \\
 	email \href{mailto:kjwesthoff@berkeley.edu}{kjwesthoff@berkeley.edu} \\
     Neha Dhage \\
-	email \href{mailto:neha_dhage@ischool.berkeley.edu}{neha_dhage@ischool.berkeley.edu}
+	email \href{mailto:neha_dhage@ischool.berkeley.edu}{neha\_dhage@ischool.berkeley.edu}
 }
 
 
@@ -81,23 +81,22 @@ MIDS Course 266 Summer 2025 Section 2 (Natalie Ahn) \\
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
 \section{Introduction}
-The human factor remains central in cyber attacks. The 2024 Verizon DBIR report  notes that 68\% of breaches involve the human element, with phishing as a key contributor. With LLM tools, bad actors can now craft highly convincing phishing messages that evade traditional detection.
+The human factor remains central in cyber attacks. The 2024 Verizon DBIR report \cite{verizon2024dbir} notes that 68\% of breaches involve the human element, with phishing as a key contributor. With LLM tools, bad actors can now craft highly convincing phishing messages that evade traditional detection.
 This project investigates whether NLP models can detect manipulative language—specifically, text designed to influence actions not in the reader's best interest.
 
 Machine learning (ML) models like Naive Bayes and basic neural networks are widely used to filter email traffic for spam (which is an abundant problem). However, they are often limited to detecting specific words or obvious patterns. Newer approaches combine lightweight ML filtering with resource-heavy NLP methods for cases that are not clearly categorized by simpler filtering. Since phishing often exploits human psychology through language, this study focuses on detecting manipulative language and whether such detection may improve defenses against phishing. Although the focus is on cybersecurity, manipulative language also appears in areas such as coercive or abusive communication, highlighting its broader relevance. Our approach first models manipulation using the “Mental Manip” dataset, then explores its potential for phishing detection.
 
 \section{Literature}
-Salloum et al. [3] provide an overview of current ML and NLP methods used for phishing detection, which forms the foundational context for this project.
-Suhaima et al. [4] trained models like BERT on spam data, whereas our focus will be on specifically detecting manipulative language.
-Wang et al. [2] created a data set that targets dialogue manipulation, which will serve as our primary training set.
-Al-Subaiey et al. have compiled a large corpus of emails in [6] from various datasets, under phishing specific email body texts; this will be used for attempts to detect phishing texts.
+Salloum et al. \cite{SALLOUM202119} provide an overview of current ML and NLP methods used for phishing detection, which forms the foundational context for this project.
+Suhaima et al. \cite{ImprovedPhishing} trained models like BERT on spam data, whereas our focus will be on specifically detecting manipulative language.
+Wang et al. \cite{MentalManip} created a data set that targets dialogue manipulation, which will serve as our primary training set.
+Al-Subaiey et al. have compiled a large corpus of emails in \cite{PhishingEmailDataset} from various datasets, under phishing specific email body texts; this will be used for attempts to detect phishing texts.
 
 \section{Datasets}
-Labeled data sets focused on manipulation are rare. Most of the research has come from psychology, which provides insight into the techniques used for manipulation. Most existing data sets suitable for NLP applications are concerned with hate speech and abusive language, which has been a hot topic in relation to online chat forums.
+Labeled data sets focused on manipulation are rare. Most of the research has come from psychology, which provides insight into the techniques used for manipulation. Most existing data sets suitable for NLP applications are concerned with hate speech and abusive language, which has been a hot topic in relation to social media.
 
 \subsection{The MentalManip Dataset}
-Wang et al. [2] introduced the "MentalManip" dataset, published on hugging face[5]. The dataset is based on 4,000 fictional dialogues from online movie scripts. The data is labeled with a detailed manipulation taxonomy in three dimensions.
-
+Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published on hugging face \cite{MentalManipDataset}. The data set is based on fictional dialogues from "The Cornell Movie Dialogs Corpus" \cite{CornellMovieCorpus} from which suitable manipulative dialogues were selected using BERT and GPT-4 models, from these 4000 dialogues were manually selected to form the data set. The data is labeled with a detailed manipulation taxonomy in three dimensions see Figure \ref{fig:Taxonomy}, adding applied technique and psychological vulnerability mechanism to the binary presence of whether the dialogue contains manipulation or not.
 \begin{figure}[!htp] % Single column :figure	
 	\centering
      	\includegraphics[width=0.5\textwidth]{Taxonomy.png}
@@ -105,16 +104,58 @@ Wang et al. [2] introduced the "MentalManip" dataset, published on hugging face[
 	\label{fig:Taxonomy}
 \end{figure}
 
+The data set was manually labeled using a multi-phase human annotation process, adapting the taxonomy (see Figure \ref{fig:Taxonomy}) to the dialogue context three times by different people annotating. This gave two versions of the data set, one where the majority two out of three constitutes the result ("$MentalManip_{maj}$") and one where all three annotators have consensus and reach the same results ("$MentalManip_{con}$"). The $MentalManip_{maj}$ data set is larger (4000 rows) and more suitable for training a model capturing more instances of manipulation, the $MentalManip_{con}$ data set is smaller (2920 rows) and more precise and better suited for fine tuning. For this project we used the $MentalManip_{maj}$ data. In some cases these data fields are not complete in the data set requiring some degree of feature manipulation, This is addressed in section \ref{sec:FeatureEngineering} below.
+
+\subsection{Data Exploration}\label{sec:DataExploration}
+The data set is not split equally between manipulation and non-manipulation, Figure \ref{fig:ManipulationRatio} shows the distribution with 2.4 times more manipulation rows than non-manipulation (discussed in section \ref{sec:FeatureEngineering}).
+
+\begin{figure}[!htp] % Single column :figure	
+	\centering
+	\includegraphics[width=0.5\textwidth]{ManipulationRatio.png}
+	\caption{Ratio of manipulation to non-manipulation in the $MentalManip_{maj}$ Dataset}
+	\label{fig:ManipulationRatio}
+\end{figure}
+
+Some of the labels are missing for some of the rows with manipulation, Figure \ref{fig:MissingLabels} shows 664\footnote{110 missing technique and 554 also missing vulnerability, we regard the technique labels as most relevant for phishing} entries with missing technique labels,.
+\begin{figure}[!htp] % Single column :figure	
+	\centering
+	\includegraphics[width=0.5\textwidth]{MisingLabels.png}
+	\caption{Incomplete labeling of the MentalManip Dataset}
+	\label{fig:MissingLabels}
+\end{figure}
+
+\subsubsection{Label Distribution}
+The labels for technique and vulnerability mechanism are not uniformly distributed, furthermore, multiple labels occur in combination as comma separated values see Figure \ref{fig:TechCoOcurrence} showing "Persuasion or Seduction" as the most occurring for technique (this aligns well with use for phishing detection).
+
+\begin{figure}[!htp] % Single column :figure	
+	\centering
+	\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
+	\caption{Distribution and Co-ocurrence of technique labels}
+	\label{fig:TechCoOcurrence}
+\end{figure}
+
+Further data exploration can be found in appendix \ref{appendix:DataExploration}
 
 
 
-\subsection{Training Dataset}
-The model will be trained on a dataset generated by Wang et al. \cite{MentalManip} which is based on 4000 labeled dialogues from films.\\
 
-\subsection{Evaluation Dataset}
-We will use data sets with labeled phishing emails in combination with results from previous models.
 
-\section{Methods}
+\section{Feature Engineering}\label{sec:FeatureEngineering}
+
+
+\begin{itemize}
+	\item Address the ratio (e.g. use only the persuasion or seduction labels)
+	\item Manipulate the labels - maybe merge the best technique and vulnerability mechanism that fits phishing
+	\item Remove rows with missing text data
+	\item etc..
+\end{itemize}
+
+We address the missing labels (see Figure \ref{fig:MissingLabels}) by either removing the rows with missing labels, or by imputing the missing values with an 'Other' category for the experiments with multi-label inference.
+
+
+
+
+\section{Experiments}
 We will build an inference model that can detect manipulated emails based on a deep neural network with transformer architecture.
 
 \section{Evaluation}
@@ -139,10 +180,10 @@ Our main interest is to investigate if the model can extend existing phishing de
 %---------------------------------------------------------------------------------------
 
 
-%\begin{appendices}
-%	\onecolumn
-%
-%	\section{Appendix}
-%
+\begin{appendices}
+	\onecolumn
+	%
+	\section{Data Exploration}\label{appendix:DataExploration}
+\end{appendices}
 %
 \end{document}
