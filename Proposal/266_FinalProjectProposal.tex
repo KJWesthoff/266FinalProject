@@ -89,14 +89,14 @@ Machine learning (ML) models like Naive Bayes and basic neural networks are wide
 \section{Literature}
 Salloum et al. \cite{SALLOUM202119} provide an overview of current ML and NLP methods used for phishing detection, which forms the foundational context for this project.
 Suhaima et al. \cite{ImprovedPhishing} trained models like BERT on spam data, whereas our focus will be on specifically detecting manipulative language.
-Wang et al. \cite{MentalManip} created a data set that targets dialogue manipulation, which will serve as our primary training set.
-Al-Subaiey et al. have compiled a large corpus of emails in \cite{PhishingEmailDataset} from various datasets, under phishing specific email body texts; this will be used for attempts to detect phishing texts.
+Wang et al. \cite{MentalManip} created a data set aiming at dialogue manipulation, which will serve as our primary training set.
+Al-Subaiey et al. have compiled a large corpus of emails in \cite{PhishingEmailDataset} from various datasets, under phishing-specific email body texts; this will be used for attempts to detect phishing texts.
 
 \section{Datasets}
 Labeled data sets focused on manipulation are rare. Most of the research has come from psychology, which provides insight into the techniques used for manipulation. Most existing data sets suitable for NLP applications are concerned with hate speech and abusive language, which has been a hot topic in relation to social media.
 
 \subsection{The MentalManip Dataset}
-Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published on hugging face \cite{MentalManipDataset}. The data set is based on fictional dialogues from "The Cornell Movie Dialogs Corpus" \cite{CornellMovieCorpus} from which suitable manipulative dialogues were selected using BERT and GPT-4 models, from these 4000 dialogues were manually selected to form the data set. The data is labeled with a detailed manipulation taxonomy in three dimensions see Figure \ref{fig:Taxonomy}, adding applied technique and psychological vulnerability mechanism to the binary presence of whether the dialogue contains manipulation or not.
+Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published on hugging face \cite{MentalManipDataset}. The data set is based on fictional dialogues from "The Cornell Movie Dialogs Corpus" \cite{CornellMovieCorpus} from which suitable manipulative dialogues were selected using BERT and GPT-4 models, from these 4000 dialogues were manually selected to form the data set. The data is labeled with a detailed manipulation taxonomy in three dimensions; see Figure \ref{fig:Taxonomy}, adding applied technique and psychological vulnerability mechanism to the binary presence of whether the dialogue contains manipulation or not.
 \begin{figure}[!htp] % Single column :figure	
 	\centering
      	\includegraphics[width=0.5\textwidth]{Taxonomy.png}
