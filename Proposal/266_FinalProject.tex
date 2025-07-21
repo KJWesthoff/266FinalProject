@@ -52,9 +52,9 @@ Phishing Attacks
 % \thanks{} is used for any text that should be placed in a footnote on the first page, such as the corresponding author's email, journal acceptance dates, a copyright/license notice, keywords, etc
 \author{
 	Karl-Johan Westhoff \\
-	email \href{mailto:kjwesthoff@berkeley.edu}{kjwesthoff@berkeley.edu} \\
+	email: \href{mailto:kjwesthoff@berkeley.edu}{kjwesthoff@berkeley.edu} \\
     Neha Dhage \\
-	email \href{mailto:neha_dhage@ischool.berkeley.edu}{neha\_dhage@ischool.berkeley.edu}
+	email: \href{mailto:neha_dhage@ischool.berkeley.edu}{neha\_dhage@ischool.berkeley.edu}
 }
 
 
@@ -140,7 +140,7 @@ The data set is not split equally between manipulation and non-manipulation, Fig
 \end{figure}
 
 \subsubsection{'Technique' and 'Vulnerability' Labels}
-Some of the labels are missing for some of the rows with manipulation present\footnote{The labels should naturally not be populated for non-manipulation rows}, Figure \ref{fig:MissingLabels} shows a total of 664\footnote{110 missing technique and 554 also missing vulnerability} missing labels for 'technique', we regard the technique labels as most relevant for phishing, especially the 'Persuasion or Seduction' label.
+Some of the labels are missing for some of the rows with manipulation present\footnote{The labels should not be populated for non-manipulation rows}, Figure \ref{fig:MissingLabels} shows a total of 664\footnote{110 missing technique and 554 also missing vulnerability} missing labels for 'technique', we regard the technique labels as most relevant for phishing, especially the 'Persuasion or Seduction' label.
 \begin{figure}[!htp] % Single column :figure	
 	\centering
 	\includegraphics[width=0.5\textwidth]{MisingLabels.png}
@@ -168,7 +168,18 @@ Considering the label inconsistencies for 'technique' and 'vulnerability' in the
 
 
 \subsection{Binary with BERT and Buddies}
-Models looking at the 'manipulative' labels are trained on the $MentalManip_{maj}$ data set. Results for BERT-basic, RoBERTa, DistilBERT, and ModernBERT, furthermore some "emotionally wiser" BERT derivatives exist which are pre-trained for emotion detection: BERTweet and EmotionBERT.
+Models looking at the 'manipulative' labels are trained on the $MentalManip_{maj}$ data set. The models were run with similar parameters, and the Accuracy at epoch before significant over fitting\footnote{Significant over fitting defined as: training loss / evaluation loss < 0.6} recorded. Following models were investigated:
+\begin{itemize}
+	\item BERT-base
+	\item RoBERTa
+	\item DistilBERT
+	\item ModernBERT
+\end{itemize}
+Furthermore some "emotionally wiser" BERT derivatives exist which are pre-trained for emotion detection:
+\begin{itemize}
+	\item BERTweet
+	\item EmotionBERT
+\end{itemize}
 
 \subsubsection{Baseline Results and Discussion}
 
