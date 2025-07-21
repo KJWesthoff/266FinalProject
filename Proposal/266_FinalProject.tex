@@ -182,10 +182,30 @@ Furthermore some "emotionally wiser" BERT derivatives exist which are pre-traine
 \end{itemize}
 
 \subsubsection{Baseline Results and Discussion}
+Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. The models were run until significant over-fitting occurred. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation.\\
+The "ModernBERT" model does not perform better, this was expected as the embedding lengths are short and not leveraging the benefits of ModernBERTs larger capacity. \\
+The "Emotionally intelligent" BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we thought to give it a try. \\
+We also tried some more advanced BERT derivatives (DestilBERT and deBERTa\_v3\_small), however these models did not perform better than RoBERTa, and they required more compute resources to train. DeBERTa uses more advanced training loss, pre-training more advanced encodigns etc.\cite{DeBERTaV3}, however only the smallest version of deBERTa was possible to train with the hardware available. These models are optimized to deliver faster inference, but the extra cost in training ressources make them less feasible for this project. \\
+The best performing model reported in Table \ref{tab:BaseModelPerformance} was RoBERTa, which seems to perform slightly better than BERT-base, however with multiple tries the performance was not consistent, sometimes BERT performed better, however RoBERTa seemed more stable giving consistent results above 0.72 and performing more Epochs before over-fitting.
 
 
-
-
+\begin{table}[h!]
+	\small
+	\begin{tabular}{|p{2.1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+		\hline
+		\textbf{Model} & \textbf{Epoch} & \textbf{Loss T/V} & \textbf{Acc Epoch} & \textbf{Acc Final} \\
+		\hline
+		BERT           & 2              & 0.97              & 0.726              & 0.70               \\
+		roBERTa        & 4              & 1.03              & 0.728              & 0.73               \\
+		deBERTa\_v3    & 3              & 0.68              & 0.704              & 0.72               \\
+		DistilBERT     & 2              & 0.75              & 0.709              & 0.72               \\
+		ModernBERT     & 2              & 0.81              & 0.718              & 0.72               \\
+		BERTweet       & 2              & 0.97              & 0.705              & 0.70               \\
+		\hline
+	\end{tabular}
+	\caption{Base Model performance comparison across different transformer architectures for binary inference on the "manipulative" column}
+	\label{tab:BaseModelPerformance}
+\end{table}
 
 
 
