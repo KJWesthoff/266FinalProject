@@ -174,6 +174,7 @@ Models looking at the 'manipulative' labels are trained on the $MentalManip_{maj
 	\item RoBERTa \cite{RoBERTa}
 	\item DistilBERT \cite{DistilBERT}
 	\item ModernBERT \cite{ModernBERT}
+	\item DeBERTaV3 \cite{DeBERTaV3}
 \end{itemize}
 Furthermore some "emotionally wiser" BERT derivatives exist which are pre-trained for emotion detection:
 \begin{itemize}
@@ -183,7 +184,8 @@ Furthermore some "emotionally wiser" BERT derivatives exist which are pre-traine
 
 \subsection{Baseline Results and Discussion}\label{sec:BaselineResults}
 Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. The models were run until significant over-fitting occurred. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation. Models can be found in Appendix \ref{appendix:BaseCaseModels}
-\subsubsection{ModernBERT} The model does not perform better, this was expected as the embedding lengths are short and not leveraging the benefits of ModernBERTs larger capacity.
+
+\subsubsection{ModernBERT} The model does not perform better, this was expected as the embedding lengths are short (see Figure \ref{fig:DialogueEmbedding}) and not leveraging the benefits of ModernBERTs larger capacity.
 
 \subsubsection{Emotionally intelligent BERT}
 BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we thought to give it a try. The EmotionBERT model was created for multi label classification of well known emotional phrases for media monitoring \cite{EmotionBERT}.
@@ -246,7 +248,9 @@ Our main interest is to investigate if the model can extend existing phishing de
 
 
 
+\section{Conclusion}
 
+The baseline investigations showed that applying the $MentalManip$ dataset to models optimized for emotional language detection does not automatically improve accuracy. Mental manipulation is less explored in literature than hate speech and abusive language, which are key concerns in social media, where sentiment analysis is both established and evolving in NLP.
 
 
 
