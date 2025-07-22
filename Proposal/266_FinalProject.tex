@@ -181,12 +181,12 @@ Furthermore some "emotionally wiser" BERT derivatives exist which are pre-traine
 	\item EmotionBERT \cite{EmotionBERT}
 \end{itemize}
 
-\subsection{Baseline Results and Discussion}
-Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. The models were run until significant over-fitting occurred. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation.
+\subsection{Baseline Results and Discussion}\label{sec:BaselineResults}
+Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. The models were run until significant over-fitting occurred. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation. Models can be found in Appendix \ref{appendix:BaseCaseModels}
 \subsubsection{ModernBERT} The model does not perform better, this was expected as the embedding lengths are short and not leveraging the benefits of ModernBERTs larger capacity.
 
 \subsubsection{Emotionally intelligent BERT}
-BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we thought to give it a try.
+BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we thought to give it a try. The EmotionBERT model was created for multi label classification of well known emotional phrases for media monitoring \cite{EmotionBERT}.
 
 \subsubsection{Advanced BERT}
 We also tried some more advanced BERT derivatives (DestilBERT and deBERTa\_v3\_small), however these models did not perform better than RoBERTa, and they required more compute resources to train. DeBERTa uses more advanced training loss, pre-training more advanced encoding etc.\cite{DeBERTaV3}, however only the smallest version of deBERTa was possible to train with the hardware available. These models are optimized to deliver faster inference, but the extra cost in training resources make them less feasible for this project.
@@ -215,6 +215,14 @@ The best performing model reported in Table \ref{tab:BaseModelPerformance} was R
 	\label{tab:BaseModelPerformance}
 \end{table}
 
+\section{Fine Tuning}
+Based on the results in section \ref{sec:BaselineResults}, we decided to fine tune the RoBERTa model with the $MentalManip_{maj}$ data set to see if we can get better results for the manipulation detection task. The MentalManip article\cite{MentalManip} achieved an accuracy of 0.78 which in itself is not impressive.
+
+\subsection{LoRA/PEFT}
+\subsection{Hyper parameters}
+
+
+
 
 
 
@@ -229,9 +237,6 @@ The best performing model reported in Table \ref{tab:BaseModelPerformance} was R
 \end{itemize}
 
 We address the missing labels (see Figure \ref{fig:MissingLabels}) by either removing the rows with missing labels, or by imputing the missing values with an 'Other' category for the experiments with multi-label inference.
-
-
-
 
 \section{Experiments}
 We will build an inference model that can detect manipulated emails based on a deep neural network with transformer architecture.
@@ -263,7 +268,12 @@ Our main interest is to investigate if the model can extend existing phishing de
 	\onecolumn
 	%
 	\section{Data Exploration}\label{appendix:DataExploration}
-	\url{https://drive.google.com/file/d/1s1mIXE58cj8miIoWOiB73VmZaSPs5vc5/view?usp=drive_link}
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/Data-Exploration_MentalManip.ipynb}
+
+	\section{BaseCaseModels}\label{appendix:BaseCaseModels}
+	\url{https://github.com/KJWesthoff/266FinalProject/tree/main/BaseCaseModels}
+
+
 \end{appendices}
 %
 \end{document}
