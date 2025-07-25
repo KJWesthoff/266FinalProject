@@ -43,6 +43,7 @@
 \usepackage{lscape}
 \usepackage{fontawesome}
 \usepackage{subcaption}
+\usepackage{subcaption}
 
 \title{Manipulative Language Detection in LLM-Crafted
 Phishing Attacks
@@ -265,7 +266,7 @@ Classification Report for the 'Persuasion' label, Base Case un-weighted is shown
 
 \subsection{Weighted loss function}
 
-To remedy the skewed label distribution, a suggested approach is adding weights to the loss function, suppressing the majority and boosting the minority class. Alternatives are over- and under-sampling. Under-sampling was disregarded due to the limited dataset size of 4,000 rows, as it would further reduce the available training data and risk losing information. Oversampling was considered but disregarded, duplicating minority samples can lead the model to remember specific sentences. Zhang et al. \cite{zhang2020revisiting} suggests that weighting the loss function is more effective than sampling when fine-tuning BERT on imbalanced data. \\
+To remedy the skewed label distribution, a suggested approach is adding weights to the loss function, suppressing the majority and boosting the minority class. Alternatives are over- and under-sampling. Under-sampling was disregarded due to the limited dataset size of 4,000 rows, as it would further reduce the available training data and risk losing information. Oversampling was considered but ultimately avoided to prevent overfitting, particularly since duplicating minority samples can lead the model to remember specific sentences. Zhang et al. \cite{zhang2020revisiting} suggests that weighting the loss function is more effective than sampling when fine-tuning BERT on imbalanced data. \\
 
 \subsubsection{Results and Discussion}
 Weights are calculated based on the label distribution and applied to the cross-entropy loss function during training\footnote{A custom derivative of the Trainer class was implemented, see Appendix \ref{appendix:WeightedResults}}. We tried a number of schemes to determine weights:
@@ -292,7 +293,7 @@ Weights are calculated based on the label distribution and applied to the cross-
 	\label{fig:V1WeightResultsRaw}
 \end{figure}%
 
-The un-capped un-normalized option 1 version performed best, it adds the most weight to the minority class and gives a recall of 0.51 for the 'Manipulative' class (a slight improvement compared to the un-weighted in Table \ref{tab:BaseCasePersuasionReport}), results option 1 are shown in Figure \ref{fig:V1WeightResultsRaw}. Results for option 2 and 3 gives slightly lower performing recalls in proportion to the weights added to the minority label and better overall Accuracy results (favoring the non manipulative class). Results are shown in Appendix \ref{appendix:WeightedResults}. A general observation during training was that training loss dropped as expected but the validation loss was rising although F1 score was still improving. The models used early stopping based on F1 score, even though the training loss vs test loss indicated over fitting.
+The un-capped un-normalized option 1 version performed best, it adds the most weight to the minority class and gives a recall of 0.51 for the 'Manipulative' class (a slight improvement compared to the un-weighted in Table \ref{tab:BaseCasePersuasionReport}), results option 1 are shown in Figure \ref{fig:V1WeightResultsRaw}. Results for option 2 and 3 gives slightly lower performing recalls in proportion to the weights added to the minority label and better overall Accuracy results (favoring the non manipulative class). Results are shown in Appendix \ref{appendix:WeightedResults}
 
 \section{Evaluation}
 Our main interest is to investigate if the model can extend existing phishing detection systems by detecting manipulating language in the emails. We will to look at false negative results from previous models, to see if the detection of manipulative text captures emails that were previously missed.
