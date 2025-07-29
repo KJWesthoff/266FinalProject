@@ -44,6 +44,10 @@
 \usepackage{fontawesome}
 \usepackage{subcaption}
 \usepackage{subcaption}
+\usepackage{courier}
+\usepackage[lighttt]{lmodern}
+
+
 
 \title{Manipulative Language Detection in LLM-Crafted
 Phishing Attacks
@@ -443,43 +447,73 @@ Investigating 'persuasion' as a means for detecting Phishing, requires some mode
 		\caption{Results for normalized weighted cross-entropy loss function}
 	\end{figure*}
 	\clearpage
-	\section{Dialogue examples}
+	\section{Dialogue examples}\label{appendix:DialogueExamples}
+	\subsection{True Positives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Person1:}  You're making it too easy. \\
+		\noindent\textbf{Person2:}  You got time on your side.  Pretty soon they'll be missed and we'll have the law up our ass. \\
+		\noindent\textbf{Person1:}  They saw you kill the driver. \\
+		\noindent\textbf{Person2:}  You're up on your details, aren't you? \\
+		\noindent\textbf{Person1:}  You can rely on them to keep quiet because this is undeclared money that could land Jack there in federal prison.  He can't afford for you to get caught and have this briefcase appear as evidence. \\
+		\noindent\textbf{Person2:}  Keep talking. \\
 
-	\subsection{False Negatives}
+		\noindent\textbf{Person1:}  Drink this! It will dull your pain. \\
+		\noindent\textbf{Person2:}  It will numb my wits, and I must have them all. If I'm senseless, or if I wail, then Longshanks will have broken me. \\
+		\noindent\textbf{Person1:}  I can't bear the thought of your torture. Take it! \\
 
-	\tiny
-	\texttt
-	\noindent\textbf{Person1:} Person1: How about some evening clothes? \\
-	\noindent\textbf{Person2:} Person2: I don't need a tuxedo. \\
-	\noindent\textbf{Person1:} Person1: Of course you do.  A tuxedo and tails. \\
-	\noindent\textbf{Person2:} Person2: Tails.  That's ridiculous. \\
-	\noindent\textbf{Person1:} Person1: You'll need them for parties. You'll need them for New Year's Eve.  Where are your evening clothes? \\
 
-	\noindent\textbf{Person1:} Person1: Take my advicegrab the first bus back to Miami. That guy's a phony. \\
-	\noindent\textbf{Person2:} Person2: I didn't ask for your advice. \\
-	\noindent\textbf{Person1:} Person1: That's right. You didn't. \\
-	\noindent\textbf{Person2:} Person2: You're not going to notify my father, are you? \\
-	\noindent\textbf{Person1:} Person1: What for? \\
-	\noindent\textbf{Person2:} Person2: If you play your cards right, you might get some money out of it. \\
-	\noindent\textbf{Person1:} Person1: I never thought of that. \\
-	\noindent\textbf{Person2:} Person2: Listen, if you'll promise not to do it, I'll pay you. I'll pay you as much as he will \\
+	}
 
-	\noindent\textbf{Person1:} Person1: I'm out here for you!  You don't know what it's like to be me out here for you. It is an up-at-dawn pride-swallowing seige that I will never fully tell you abou ! Okay?! Help me help you help me help you. \\
-	\noindent\textbf{Person2:} Person2: You're hanging by a very thin thread, dude.  And I dig that about you. \\
+	\subsection{False Negatives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Person1:}  She's working as fast as she can, Icarus.  It will be ready soon. \\
+		\noindent\textbf{Person2:}  It's ready now, I know it is. \\
+		\noindent\textbf{Person1:}  She says it's not. \\
+		\noindent\textbf{Person2:}  She's lying.  She lost the first one on purpose. \\
+		\noindent\textbf{Person1:}  She did not.  The mouse ran down the drain. \\
+		\noindent\textbf{Person2:}  She let it escape because she wants me to die. \\
+		\noindent\textbf{Person1:}  Don't be a child, Icarus.  She is just another scientist and like all scientists, she doesn't care about anything outside the \\
 
-	\noindent\textbf{Person1:} Person1: You're right. I remember Grandpierre looking through it. But there was nothing in it -- at least, nothing that the police thought was very important. \\
-	\noindent\textbf{Person2:} Person2: Can you remember anything at all? \\
-	\noindent\textbf{Person1:} Person1: Grandpierre asked me about an appointment Charles had -- on the day he was killed. \\
-	\noindent\textbf{Person2:} Person2: With whom? Where? \\
-	\noindent\textbf{Person1:} Person1: I think it only said where -- but I can't -- \\
-	\noindent\textbf{Person2:} Person2: Think, Reggie, you've got to think -- it may be what we're looking for. \\
-	\noindent\textbf{Person1:} Person1: That money's not ours, \\
+		\noindent\textbf{Person1:}  Why did you have LUH come here? \\
+		\noindent\textbf{Person2:}  Why are you so concerned? \\
+		\noindent\textbf{Person1:}  What's going on? \\
+		\noindent\textbf{Person2:}  I want you for my roommate. \\
+		\noindent\textbf{Person1:}  Where's LUH? \\
+		\noindent\textbf{Person2:}  It will be good for both of us. I've got it all arranged. \\
 
-	\noindent\textbf{Person1:} Person1: I really think we should reconsider the project direction. The current approach has too many pitfalls. \\
-	\noindent\textbf{Person2:} Person2: Lila, I appreciate your input, but I've made my decision. \\
-	\noindent\textbf{Person1:} Person1: I just think it's crucial to evaluate all angles before diving in. \\
-	\noindent\textbf{Person2:} Person2: And who writes your paycheck? Sometimes, it's best to follow orders and trust the process. \\
-	\noindent\textbf{Person1:} Person1: Understood, but I still felt it was my duty to voice my concerns. \\
+
+	}
+
+	\subsection{False Positives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Person1:}  Yes! You own the Coffer of Shadow. Nothing can withstand its power. \\
+		\noindent\textbf{Person2:}  I've been saving it. For the right moment. \\
+		\noindent\textbf{Person1:}  That moment is now! What good is a sword unless it be unsheathed? Use it, and no one will dare oppose you again. No one. \\
+
+		\noindent\textbf{Person1:}  Here and there. Around. \\
+		\noindent\textbf{Person2:}  Uh-huh. One of those cozy bed and breakfast places, probably. \\
+		\noindent\textbf{Person1:}  Yeah, that's right. \\
+		\noindent\textbf{Person2:}  Except that there's no bed, is there? And no breakfast either. \\
+		\noindent\textbf{Person1:}  The material world is an illusion. It doesn't matter if they're there or not. The world is in my head. \\
+		\noindent\textbf{Person2:}  But your body is in the world, isn't it?  If someone offered you a place to stay, you wouldn't necessarily refuse, would you? \\
+		\noindent\textbf{Person1:}  \\
+
+
+	}
+
+	\subsection{True Negatives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Person1:}  I don't know who you think you're talking to! I ain't some whore you brought here! I've been trying to be your friend and you treat me like shit! \\
+		\noindent\textbf{Person2:}  Be a friend. Leave. \\
+		\noindent\textbf{Person1:}  You got no manners and you never tell the truth! You're nothin' special. And if you ask me, you got no chance at all of being an officer! \\
+
+		\noindent\textbf{Person1:}  Oh, Rufus! \\
+		\noindent\textbf{Person2:}  All I can offer you is a Rufus over your head. \\
+		\noindent\textbf{Person1:}  Oh, Your Excellency, I don't know what to say. \\
+		\noindent\textbf{Person2:}  I wouldn't know what to say either if I was in your place.  Maybe you can suggest something. \\
+
+
+	}
 
 
 
