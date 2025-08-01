@@ -154,12 +154,12 @@ Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformanc
 \subsubsection{ModernBERT} The model does not perform better, this was expected as the embedding lengths are short (see Figure \ref{fig:DialogueEmbedding}) and not leveraging the benefits of ModernBERTs larger capacity.
 
 \subsubsection{Emotionally intelligent BERT}
-BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we thought to give it a try. The EmotionBERT model was created for multi label classification of well known emotional phrases for media monitoring \cite{EmotionBERT}.
+BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we decided to give it a try since the EmotionBERT model was created for multi label classification of well known emotional phrases for media monitoring \cite{EmotionBERT}.
 
 \subsubsection{Advanced BERTs}
 We also tried some more advanced BERT derivatives (DestilBERT and deBERTa\_v3\_small), however these models did not perform better than RoBERTa, and they required more compute resources to train. DeBERTa uses more advanced training loss, pre-training more advanced encoding etc.\cite{DeBERTaV3}, however only the smallest version of deBERTa was possible to train with the hardware available. These models are optimized to deliver faster inference, but the extra cost in training resources make them less feasible for this project.
 \subsubsection{RoBERTa}
-The best performing model reported in Table \ref{tab:BaseModelPerformance} was RoBERTa, which seems to perform slightly better than BERT-base, however with multiple tries the performance was not consistent, sometimes BERT performed better, however RoBERTa seemed more stable giving consistent results above 0.72 and performing more Epochs before over-fitting.
+The second best performing model reported in Table \ref{tab:BaseModelPerformance} was RoBERTa, which seems to perform slightly better than BERT-base, however with multiple tries the performance was not consistent, sometimes BERT performed better, however RoBERTa seemed more stable giving consistent results above 0.72 and performing more Epochs before over-fitting.
 
 
 \begin{table}[h!]
@@ -174,7 +174,7 @@ The best performing model reported in Table \ref{tab:BaseModelPerformance} was R
 		DistilBERT     & 2              & 0.75              & 0.709              & 0.72               \\
 		ModernBERT     & 2              & 0.81              & 0.718              & 0.72               \\
 		BERTweet       & 2              & 0.97              & 0.705              & 0.70               \\
-		EmotionBERT    & 2              & 1.04              & 0.704              & 0.70               \\
+		EmotionBERT    & 2              & 1.04              & 0.712              & 0.74               \\
 
 
 		\hline
@@ -187,6 +187,7 @@ The best performing model reported in Table \ref{tab:BaseModelPerformance} was R
 Based on the results in section \ref{sec:BaselineResults}, we decided to fine tune the RoBERTa model with the $MentalManip_{maj}$ data set to see if we can get better results for the manipulation detection task. The MentalManip article\cite{MentalManip} achieved an accuracy of 0.78.
 
 \subsection{LoRA/PEFT}
+We applied LoRA technique to 
 \subsection{Hyper parameters}
 
 
