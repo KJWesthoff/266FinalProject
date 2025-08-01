@@ -176,7 +176,7 @@ RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it
 		DistilBERT     & 2              & 0.75              & 0.709              & 0.72               \\
 		ModernBERT     & 2              & 0.81              & 0.718              & 0.72               \\
 		BERTweet       & 2              & 0.97              & 0.705              & 0.70               \\
-		EmotionBERT    & 2              & 1.04              & 0.704              & 0.70               \\
+		EmotionBERT    & 2              & 1.04              & 0.712              & 0.74               \\
 
 
 		\hline
@@ -189,6 +189,7 @@ RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it
 Based on the results in section \ref{sec:BaselineResults}, we decided to fine tune the RoBERTa model with the $MentalManip_{maj}$ data set to see if we can get better results for the manipulation detection task. The MentalManip article\cite{MentalManip} achieved an accuracy of 0.78.
 
 \subsection{LoRA/PEFT}
+We applied LoRA technique to 
 \subsection{Hyper parameters}
 
 
