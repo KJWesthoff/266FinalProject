@@ -100,8 +100,8 @@ Al-Subaiey et al. have compiled a large corpus of emails in \cite{PhishingEmailD
 \section{Datasets}
 Labeled data sets focused on manipulation are rare. Most of the research has come from psychology, which provides insight into the techniques used for manipulation rather than bulk data suitable for AI model training. Most existing data sets suitable for NLP applications are concerned with hate speech and abusive language, which has been an important topic in relation to social media.
 
-\section{The MentalManip Dataset}
-Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published on hugging face \cite{MentalManipDataset}. The data set is based on fictional dialogues from "The Cornell Movie Dialogs Corpus" \cite{CornellMovieCorpus} from which suitable manipulative dialogues were selected using BERT and GPT-4 models, from these, 4000 dialogues were manually selected to form the data set. The data is labeled with a detailed manipulation taxonomy in three dimensions; see Figure \ref{fig:Taxonomy}, adding applied technique and psychological vulnerability mechanism to the binary presence of whether the dialogue contains manipulation or not.
+\section{"MentalManip" Dataset}
+Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published on hugging face \cite{MentalManipDataset}. The data set is based on fictional dialogues from "The Cornell Movie Dialogs Corpus" \cite{CornellMovieCorpus} from which suitable manipulative dialogues were selected using BERT and GPT-4 models, from these, 4000 dialogues were manually selected to form the data set. The data is labeled with a detailed manipulation taxonomy in three dimensions; see Figure \ref{fig:Taxonomy}, adding applied technique and psychological vulnerability mechanism to the binary presence of whether the dialogue contains manipulation or not. Some examples of dialogues are listed in appendix \ref{appendix:DialogueExamples}.
 
 \begin{figure}[!htp] % Single column :figure	
 	\centering
@@ -110,64 +110,17 @@ Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published o
 	\label{fig:Taxonomy}
 \end{figure}
 
-The data set was manually labeled using a multi-phase human annotation process, adapting the taxonomy (Figure \ref{fig:Taxonomy}) to the dialogue context three times by different people annotating. This gave two versions of the data set, one where the majority two out of three constitutes the result ("$MentalManip_{maj}$") and one where all three annotators have consensus and reach the same results ("$MentalManip_{con}$"). The $MentalManip_{maj}$ data set is larger (4000 rows) and more suitable for training a model capturing more instances of manipulation, the $MentalManip_{con}$ data set is smaller (2920 rows) and more precise and better suited for fine tuning. For this project we used the $MentalManip_{maj}$ data.
-
-\subsection{Dialogues}
-The 4000 dialogues in the data set are between two persons exchanging sentences. By far the majority of dialogues consist of two exchanges, one by each person (there are only three cases with three exchanges). Word count statistics are shown in Figure \ref{fig:DialogueWordCount}, most dialogues consist of up to 50 words per person, and the number of words uttered by each person is fairly balanced, with person 2 saying slightly more words than person 1 in the up to 50 word majority case. Figure \ref{fig:DialogueEmbedding} shows the distribution of token counts for the dialogues in the data set, tokenized using BERT-base as reference. Only a minor number of dialogues exceed the BERT-base embedding size of 512 tokens.
-
-
-\begin{figure}[!htp] % Single column :figure	
-	\centering
-	\includegraphics[width=0.5\textwidth]{DialogueWordCountStats.png}
-	\caption{Word count statistics for the dialogues in the $MentalManip_{maj}$ data set, words uttered by each person}
-	\label{fig:DialogueWordCount}
-\end{figure}
-
-\begin{figure}[!htp] % Single column :figure	
-	\centering
-	\includegraphics[width=0.5\textwidth]{DialogueEmbeddingStats.png}
-	\caption{Statistics for the dialogue in the $MentalManip_{maj}$ data set, tokenized using BERT-base}
-	\label{fig:DialogueEmbedding}
-\end{figure}
-
+The data set was manually labeled using a multi-phase human annotation process, adapting the taxonomy (Figure \ref{fig:Taxonomy}) to the dialogue context three times by different people annotating. This gave two versions of the data set, one where the majority two out of three constitutes the result ("$MentalManip_{maj}$") and one where all three annotators have consensus and reach the same results ("$MentalManip_{con}$"). The $MentalManip_{maj}$ data set is larger with 4000 rows and was chosen for this project (The larger size is assumed better for training). We ensured that the dialogues could fit into the BERT model embedding size of 512 tokens.
+Data exploration can be found in appendix \ref{appendix:DataExploration}
 
 \subsection{Labels}
-
-\subsubsection{Manipulation Label}
-The data set is not split equally between manipulation and non-manipulation, Figure \ref{fig:ManipulationRatio} shows the distribution with 2.4 times more manipulation rows than non-manipulation.
-
-\begin{figure}[!htp] % Single column :figure	
-	\centering
-	\includegraphics[width=0.5\textwidth]{ManipulationRatio.png}
-	\caption{Ratio of manipulation to non-manipulation in the $MentalManip_{maj}$ Dataset}
-	\label{fig:ManipulationRatio}
-\end{figure}
-
-\subsubsection{'Technique' and 'Vulnerability' Labels}
-Some of the labels are missing for some of the rows with manipulation present\footnote{The labels should not be populated for non-manipulation rows}, Figure \ref{fig:MissingLabels} shows a total of 664\footnote{110 missing technique and 554 also missing vulnerability} missing labels for 'technique', we regard the technique labels as most relevant for phishing, especially the 'Persuasion or Seduction' label.
-\begin{figure}[!htp] % Single column :figure	
-	\centering
-	\includegraphics[width=0.5\textwidth]{MisingLabels.png}
-	\caption{Incomplete labeling of the MentalManip Dataset}
-	\label{fig:MissingLabels}
-\end{figure}
-
-
-\begin{figure}[!htp] % Single column :figure	
-	\centering
-	\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
-	\caption{Distribution and Co-ocurrence of technique labels}
-	\label{fig:TechCoOcurrence}
-\end{figure}
-
-Further data exploration can be found in appendix \ref{appendix:DataExploration}
-
+The dataset has a detailed but also complex labeling of the taxnonomy in Figure \ref{fig:Taxonomy}. The labels are un-evenly distributed 'Manipulative' occurs 2.4 times more than 'Non-manipulative', some of the 'Manipulation Technique' and 'Targeted Vulnerability' contain multiple comma separated values, and some are missing, see Appendix \ref{appendix:Labels}. With Phishing detection being our primary target, we looked at the 'Persuasion and Seduction' label which (luckily) is the most abundant in the data. However, the data is still skewed with 4.2 times more non-ocurrences than retries with the label.
 
 
 
 \section{Baselines}
-With the relatively short embeddings (see Figure \ref{fig:DialogueEmbedding}), the more basic versions of BERT have sufficient capacity to handle the data. The MentalManip article \cite{MentalManip} also uses some decoder only models by 'zero' and 'few-shot' prompting the model with random example from the data set. This seems to perform better for overall binary classification, but only a little, and the LLM's have a tendency to pick up on toxicity and hate-speech and identify these as manipulation.
-Considering the label inconsistencies for 'technique' and 'vulnerability' in the data set, we will focus on the binary classification of manipulation for choosing a baseline model for further experimentation.
+With the relatively short embeddings (see Appendix, Figure \ref{fig:DialogueEmbedding}), the more basic versions of BERT have sufficient capacity to handle the data.
+Considering the label inconsistencies for 'technique' and 'vulnerability' in the data set, we will focus on the binary classification of "Presence of Manipulation" for choosing a baseline model for further experimentation.
 
 
 \subsection{Binary with BERT and Buddies}
@@ -240,7 +193,7 @@ Persuasion is expected to be the main technique in phishing, where the aim is to
 The 'technique' column in the data set was chosen as binary label, with 'persuasion' present in the text being the positive class (some rows have multiple technique labels). The label distribution is 4.2 to 1 for the 'non-persuasion' to 'persuasion' labels, i.e. near the opposite of the data sets 'manipulative' vs 'not' when including all techniques and vulnerabilities.
 
 \subsubsection{Results and Discussion, Persuasion}
-Classification Report for the 'Persuasion' label, Base Case un-weighted is shown in Table \ref{tab:BaseCasePersuasionReport}. At a glance, the model shows decent overall accuracy (0.80), However as we are interested in identifying persuasion the important metrics are recall and precision for the 'Manipulative' class, here the results are not so impressive, out of all actual manipulative instances, only 28\% were correctly predicted as manipulative (confusion matrix and results are shown in appendix \ref{fig:UNWeightedResults}). A possible cause for the models difficulty identifying persuasion is the skewed label distribution.
+Classification Report for the 'Persuasion' label, Base Case un-weighted is shown in Table \ref{tab:BaseCasePersuasionReport}. At a glance, the model shows decent overall accuracy (0.80), However as we are interested in identifying persuasion the important metrics are recall and precision for the 'Manipulative' class, here the results are not so impressive, out of all actual manipulative instances, only 28\% were correctly predicted as manipulative (confusion matrix and results are shown in appendix \ref{fig:UNWeightedResults}). The cause for the models difficulty identifying persuasion is assumed to be the skewed label distribution.
 
 \begin{table}[h!]
 	\small
@@ -315,7 +268,7 @@ An observed feature during training, shown in Figure \ref{fig:V1EpochPlot}, epoc
 The baseline investigations showed that applying the $MentalManip$ dataset to models optimized for emotional language detection does not automatically improve accuracy. Mental manipulation is less explored in literature than hate speech and abusive language, which are key concerns in social media, where sentiment analysis is both established and evolving in NLP, using these models do not directly translate to improvement in detecting manipulation. \\
 Investigating 'persuasion' as a means for detecting Phishing, requires some model manipulation as we are trying to detect a minority class, and the results show moderate (at best) viability for detecting persuasion.
 
-
+The MentalManip article \cite{MentalManip} also uses some decoder only models by 'zero' and 'few-shot' prompting the model with random example from the data set. This seems to perform better for overall binary classification, but only a little, and the LLM's have a tendency to pick up on toxicity and hate-speech and identify these as manipulation.
 
 
 %----------------------------------------------------------------------------------------
@@ -336,6 +289,62 @@ Investigating 'persuasion' as a means for detecting Phishing, requires some mode
 	\onecolumn
 	%
 	\section{Data Exploration}\label{appendix:DataExploration}
+
+	\subsection{Dialogues}
+	The 4000 dialogues in the data set are between two persons exchanging sentences. Word count statistics are shown in Figure \ref{fig:DialogueWordCount}, most dialogues consist of up to 50 words per person, and the number of words uttered by each person is fairly balanced, with person 2 saying slightly more words than person 1 in the up to 50 word majority case. Figure \ref{fig:DialogueEmbedding} shows the distribution of token counts for the dialogues in the data set, tokenized using BERT-base as reference. Only a minor number of dialogues exceed the BERT-base embedding size of 512 tokens.
+
+
+	\begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{DialogueWordCountStats.png}
+		\caption{Word count statistics for the dialogues in the $MentalManip_{maj}$ data set, words uttered by each person}
+		\label{fig:DialogueWordCount}
+	\end{figure}
+
+	\begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{DialogueEmbeddingStats.png}
+		\caption{Statistics for the dialogue in the $MentalManip_{maj}$ data set, tokenized using BERT-base}
+		\label{fig:DialogueEmbedding}
+	\end{figure}
+
+
+	\subsection{Labels}\label{appendix:Labels}
+
+	\subsubsection{Manipulation Label}
+	The data set is not split equally between manipulation and non-manipulation, Figure \ref{fig:ManipulationRatio} shows the distribution with 2.4 times more manipulation rows than non-manipulation.
+
+	\begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{ManipulationRatio.png}
+		\caption{Ratio of manipulation to non-manipulation in the $MentalManip_{maj}$ Dataset}
+		\label{fig:ManipulationRatio}
+	\end{figure}
+
+	\subsubsection{'Technique' and 'Vulnerability' Labels}
+	Some of the labels are missing for some of the rows with manipulation present\footnote{The labels should not be populated for non-manipulation rows}, Figure \ref{fig:MissingLabels} shows a total of 664\footnote{110 missing technique and 554 also missing vulnerability} missing labels for 'technique', we regard the technique labels as most relevant for phishing, especially the 'Persuasion or Seduction' label.
+	\begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{MisingLabels.png}
+		\caption{Incomplete labeling of the MentalManip Dataset}
+		\label{fig:MissingLabels}
+	\end{figure}
+
+
+	\begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
+		\caption{Distribution and Co-ocurrence of technique labels}
+		\label{fig:TechCoOcurrence}
+	\end{figure}
+
+
+
+
+
+
+
+
 	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/Data-Exploration_MentalManip.ipynb}
 
 	\section{BaseCaseModels}\label{appendix:BaseCaseModels}
