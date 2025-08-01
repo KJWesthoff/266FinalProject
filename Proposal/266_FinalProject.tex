@@ -110,20 +110,30 @@ Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published o
 	\label{fig:Taxonomy}
 \end{figure}
 
-The data set was manually labeled using a multi-phase human annotation process, adapting the taxonomy (Figure \ref{fig:Taxonomy}) to the dialogue context three times by different people annotating. This gave two versions of the data set, one where the majority two out of three constitutes the result ("$MentalManip_{maj}$") and one where all three annotators have consensus and reach the same results ("$MentalManip_{con}$"). The $MentalManip_{maj}$ data set is larger with 4000 rows and was chosen for this project (The larger size is assumed better for training). We ensured that the dialogues could fit into the BERT model embedding size of 512 tokens.
+The data set was manually labeled using a multi-phase human annotation process, adapting the taxonomy (Figure \ref{fig:Taxonomy}) to the dialogue context three times by different people annotating. This gave two versions of the data set, one where the majority two out of three constitutes the result ("$MentalManip_{maj}$") and one where all three annotators have consensus and reach the same results ("$MentalManip_{con}$"). The $MentalManip_{maj}$ data set is larger with 4000 rows and was chosen for this project (The larger size is assumed better for training). We ensured that the dialogues could (mostly) fit into the BERT model embedding size of 512 tokens.
 Data exploration can be found in appendix \ref{appendix:DataExploration}
 
 \subsection{Labels}
-The dataset has a detailed but also complex labeling of the taxnonomy in Figure \ref{fig:Taxonomy}. The labels are un-evenly distributed 'Manipulative' occurs 2.4 times more than 'Non-manipulative', some of the 'Manipulation Technique' and 'Targeted Vulnerability' contain multiple comma separated values, and some are missing, see Appendix \ref{appendix:Labels}. With Phishing detection being our primary target, we looked at the 'Persuasion and Seduction' label which (luckily) is the most abundant in the data. However, the data is still skewed with 4.2 times more non-ocurrences than retries with the label.
+The dataset features a complex labeling scheme based on the taxonomy in Figure \ref{fig:Taxonomy}. The labels are unevenly distributed, with 'Manipulative' occurring 2.4 times more often than 'Non-manipulative'. Some 'Manipulation Technique' and 'Targeted Vulnerability' labels contain multiple comma-separated values, while others are missing. The co-occurrence of multiple 'Manipulation Technique' labels is shown in Figure \ref{fig:TechCoOcurrence} (see further analysis in Appendix \ref{appendix:Labels}). For phishing detection, we focused on the 'Persuasion and Seduction' label, which is the most frequent in the data (Figure \ref{fig:TechCoOcurrence}). However, using this label for binary inference results in a skewed dataset, with 4.2 times more non-occurrences than occurrences of the label.
+
+\begin{figure}[!htp] % Single column :figure	
+	\centering
+	\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
+	\caption{Distribution and Co-ocurrence of 'Manipulation Technique' labels}
+	\label{fig:TechCoOcurrence}
+\end{figure}
+
+
+
+
 
 
 
 \section{Baselines}
-With the relatively short embeddings (see Appendix, Figure \ref{fig:DialogueEmbedding}), the more basic versions of BERT have sufficient capacity to handle the data.
-Considering the label inconsistencies for 'technique' and 'vulnerability' in the data set, we will focus on the binary classification of "Presence of Manipulation" for choosing a baseline model for further experimentation.
+Given the short embeddings (see Appendix \ref{appendix:DataExploration}), basic BERT models are sufficient for the data. Due to label inconsistencies, we will focus on binary classification of 'Presence of Manipulation' as the baseline for further experimentation.
 
 
-\subsection{Binary with BERT and Buddies}
+\subsection{Binary with BERT and its Buddies}
 Models looking at the 'manipulative' labels are trained on the $MentalManip_{maj}$ data set. The models were run with similar parameters, and the Accuracy at epoch before significant over fitting\footnote{Significant over fitting defined as: training loss / evaluation loss < 0.6} recorded. Following models were investigated:
 \begin{itemize}
 	\item BERT-base \cite{BERT-base}
@@ -329,15 +339,6 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 		\caption{Incomplete labeling of the MentalManip Dataset}
 		\label{fig:MissingLabels}
 	\end{figure}
-
-
-	\begin{figure}[!htp] % Single column :figure	
-		\centering
-		\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
-		\caption{Distribution and Co-ocurrence of technique labels}
-		\label{fig:TechCoOcurrence}
-	\end{figure}
-
 
 
 
