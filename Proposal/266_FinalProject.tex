@@ -132,9 +132,9 @@ The dataset features a complex labeling scheme based on the taxonomy in Figure \
 \section{Baselines}
 Given the short embeddings (see Appendix \ref{appendix:DataExploration}), basic BERT models are sufficient for the data. Due to label inconsistencies, we will focus on binary classification of 'Presence of Manipulation' as the baseline for further experimentation.
 
+\subsection{Binary with BERT and its Variants}
+Models trained on the 'manipulative' labels used the $MentalManip_{maj}$ dataset. They were run with similar parameters, and the accuracy at the epoch before significant overfitting\footnote{Significant overfitting is defined as: training loss / evaluation loss < 0.6} was recorded. The following models were investigated:
 
-\subsection{Binary with BERT and its Buddies}
-Models looking at the 'manipulative' labels are trained on the $MentalManip_{maj}$ data set. The models were run with similar parameters, and the Accuracy at epoch before significant over fitting\footnote{Significant over fitting defined as: training loss / evaluation loss < 0.6} recorded. Following models were investigated:
 \begin{itemize}
 	\item BERT-base \cite{BERT-base}
 	\item RoBERTa \cite{RoBERTa}
@@ -149,17 +149,19 @@ Furthermore some "emotionally wiser" BERT derivatives exist which are pre-traine
 \end{itemize}
 
 \subsection{Baseline Results and Discussion}\label{sec:BaselineResults}
-Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. The models were run until significant over-fitting occurred. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation. Models can be found in Appendix \ref{appendix:BaseCaseModels}
+Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation. Models can be found in Appendix \ref{appendix:BaseCaseModels}
 
 \subsubsection{ModernBERT} The model does not perform better, this was expected as the embedding lengths are short (see Figure \ref{fig:DialogueEmbedding}) and not leveraging the benefits of ModernBERTs larger capacity.
 
-\subsubsection{Emotionally intelligent BERT}
-BERTweet performs on par with BERT-base, the model is primarily trained for "Part-of-speech tagging", "Named-entity recognition" and "text classification" \cite{BERTweet} herunder including emjojis etc. i.e. The model is not per-se expected to be better at manipulation detection, but we thought to give it a try. The EmotionBERT model was created for multi label classification of well known emotional phrases for media monitoring \cite{EmotionBERT}.
+\subsubsection{Emotionally Intelligent BERT}
+BERTweet performs similarly to BERT-base. It is primarily trained for tasks like part-of-speech tagging and text classification \cite{BERTweet}, not manipulation detection. The EmotionBERT model, designed for multi-label emotional phrase classification in media monitoring \cite{EmotionBERT}, was also tested.
 
 \subsubsection{Advanced BERTs}
-We also tried some more advanced BERT derivatives (DestilBERT and deBERTa\_v3\_small), however these models did not perform better than RoBERTa, and they required more compute resources to train. DeBERTa uses more advanced training loss, pre-training more advanced encoding etc.\cite{DeBERTaV3}, however only the smallest version of deBERTa was possible to train with the hardware available. These models are optimized to deliver faster inference, but the extra cost in training resources make them less feasible for this project.
+More advanced BERT derivatives (DestilBERT and deBERTa\_v3\_small) did not outperform RoBERTa and required more computational resources. DeBERTa uses advanced pre-training and encoding techniques \cite{DeBERTaV3}, but only the smallest version could be trained due to hardware limitations. While optimized for faster inference, their training resource demands made them less feasible.
+
 \subsubsection{RoBERTa}
-The best performing model reported in Table \ref{tab:BaseModelPerformance} was RoBERTa, which seems to perform slightly better than BERT-base, however with multiple tries the performance was not consistent, sometimes BERT performed better, however RoBERTa seemed more stable giving consistent results above 0.72 and performing more Epochs before over-fitting.
+RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it slightly outperformed BERT-base. All the models performances were inconsistent across multiple runs, however, RoBERTa seemed more stable, consistently achieving accuracy above 0.72 and lasting more epochs before overfitting.
+
 
 
 \begin{table}[h!]
