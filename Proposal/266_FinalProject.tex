@@ -275,6 +275,7 @@ An observed feature during training, shown in Figure \ref{fig:V1EpochPlot}, epoc
 	\label{fig:V1EpochPlot}
 \end{figure}%
 
+\section{Phishing Detection}
 We further used the model with LoRA and layers 9 - 11 frozen to execute inference on Phishing email data we obtained from Kaggle. \cite{PhishingEmailDataset}  This dataset included 7 different files of data. We picked two that were in English (Ling.csv and SpamAssasin.csv). They included body of the phishing email and data was labeled to indicate the binary classification between manipulative and non-manipulative. 
 
 The Ling.csv file contained 2859 records and only 458 out of them were manipulative. We got the overall accuracy of 0.29 for identifying manipulative with precision of 0.18, recall of 0.96 and F1-score of 0.30. The dataset was imbalanced with less manipulative records. The results show that our model was over-sensitive to detecting manipulative language and rarely missed identifying manipulative cases(high recall) but also flagged too many non-manipulative cases as well (low precision).  
@@ -339,6 +340,14 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 		\includegraphics[width=0.5\textwidth]{ManipulationRatio.png}
 		\caption{Ratio of manipulation to non-manipulation in the $MentalManip_{maj}$ Dataset}
 		\label{fig:ManipulationRatio}
+	\end{figure}
+
+
+        \begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{VulnerabilityCoOcurrence.png}
+		\caption{Co ocurrence of the Vulnerability column in the data $MentalManip_{maj}$ Dataset}
+		\label{fig:VulnerabilityCoOcurrence}
 	\end{figure}
 
 	\subsubsection{'Technique' and 'Vulnerability' Labels}
