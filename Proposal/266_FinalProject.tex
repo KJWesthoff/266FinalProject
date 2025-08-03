@@ -110,18 +110,12 @@ Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published o
 	\label{fig:Taxonomy}
 \end{figure}
 
-The data set was manually labeled using a multi-phase human annotation process, adapting the taxonomy (Figure \ref{fig:Taxonomy}) to the dialogue context three times by different people annotating. This gave two versions of the data set, one where the majority two out of three constitutes the result ("$MentalManip_{maj}$") and one where all three annotators have consensus and reach the same results ("$MentalManip_{con}$"). The $MentalManip_{maj}$ data set is larger with 4000 rows and was chosen for this project (The larger size is assumed better for training). We ensured that the dialogues could (mostly) fit into the BERT model embedding size of 512 tokens.
-Data exploration can be found in appendix \ref{appendix:DataExploration}
+
+The dataset was manually labeled through a three-step human annotation process using an adapted taxonomy (Figure \ref{fig:Taxonomy}). This resulted in two versions: one based on majority agreement (“$MentalManip_{maj}$”) and one on full consensus (“$MentalManip_{con}$”). We used $MentalManip_{maj}$, which has 4000 rows, to leverage its larger size for training. Dialogues were trimmed to fit within BERT’s 512-token limit. Data exploration is in Appendix \ref{appendix:DataExploration}.
 
 \subsection{Labels}
-The dataset features a complex labeling scheme based on the taxonomy in Figure \ref{fig:Taxonomy}. The labels are unevenly distributed, with 'Manipulative' occurring 2.4 times more often than 'Non-manipulative'. Some 'Manipulation Technique' and 'Targeted Vulnerability' labels contain multiple comma-separated values, while others are missing. The co-occurrence of multiple 'Manipulation Technique' labels is shown in Figure \ref{fig:TechCoOcurrence} (see further analysis in Appendix \ref{appendix:Labels}). For phishing detection, we focused on the 'Persuasion and Seduction' label, which is the most frequent in the data (Figure \ref{fig:TechCoOcurrence}). However, using this label for binary inference results in a skewed dataset, with 4.2 times more non-occurrences than occurrences of the label.
+The dataset uses a complex labeling system based on the taxonomy in Figure \ref{fig:Taxonomy}, with uneven label distribution—‘Manipulative’ appears 2.4× more than ‘Non-manipulative’. Some 'Technique' and 'Vulnerability' fields have multiple or missing values.  See details in Appendix \ref{appendix:Labels}. For phishing detection the most frequent label, ‘Persuasion and Seduction’, seemed most interesting though this creates class imbalance (4.2× more negatives than positives).
 
-\begin{figure}[!htp] % Single column :figure	
-	\centering
-	\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
-	\caption{Distribution and Co-ocurrence of 'Manipulation Technique' labels}
-	\label{fig:TechCoOcurrence}
-\end{figure}
 
 
 
@@ -148,20 +142,22 @@ Furthermore some "emotionally wiser" BERT derivatives exist which are pre-traine
 	\item EmotionBERT \cite{EmotionBERT}
 \end{itemize}
 
-\subsection{Baseline Results and Discussion}\label{sec:BaselineResults}
-Results with losses and accuracy are shown in Table \ref{tab:BaseModelPerformance}. In general the models over-fit after a few epochs which is to be expected with a model that is extended from pre-trained. The Accuracy results are around 0.70-0.72 with little variation. Models can be found in Appendix \ref{appendix:BaseCaseModels}
 
-\subsubsection{ModernBERT} The model does not perform better, this was expected as the embedding lengths are short (see Figure \ref{fig:DialogueEmbedding}) and not leveraging the benefits of ModernBERTs larger capacity.
+\subsection{Baseline Results and Discussion}\label{sec:BaselineResults}
+
+Baseline results are shown in Table \ref{tab:BaseModelPerformance}. Most models overfit after a few epochs, which is typical for fine-tuning pre-trained models. Accuracy ranged from 0.70 to 0.72 with limited variation. Model details are in Appendix \ref{appendix:BaseCaseModels}.
+
+\subsubsection{ModernBERT}
+ModernBERT showed no advantage, as short input lengths (Figure \ref{fig:DialogueEmbedding}) didn't leverage its larger capacity.
 
 \subsubsection{Emotionally Intelligent BERT}
-BERTweet performs similarly to BERT-base. It is primarily trained for tasks like part-of-speech tagging and text classification \cite{BERTweet}, not manipulation detection. The EmotionBERT model, designed for multi-label emotional phrase classification in media monitoring \cite{EmotionBERT}, was also tested.
+BERTweet performed similarly to BERT-base. It is tuned for tasks like POS tagging and text classification \cite{BERTweet}, not manipulation detection. EmotionBERT \cite{EmotionBERT}, designed for emotional phrase classification, was also tested.
 
 \subsubsection{Advanced BERTs}
-More advanced BERT derivatives (DestilBERT and deBERTa\_v3\_small) did not outperform RoBERTa and required more computational resources. DeBERTa uses advanced pre-training and encoding techniques \cite{DeBERTaV3}, but only the smallest version could be trained due to hardware limitations. While optimized for faster inference, their training resource demands made them less feasible.
+DestilBERT and DeBERTa\_v3\_small didn’t outperform RoBERTa and required more resources. Only the smallest DeBERTa variant could be used due to hardware constraints, making these models less practical.
 
 \subsubsection{RoBERTa}
-RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it slightly outperformed BERT-base. All the models performances were inconsistent across multiple runs, however, RoBERTa seemed more stable, consistently achieving accuracy above 0.72 and lasting more epochs before overfitting.
-
+RoBERTa performed best, slightly outperforming BERT-base. It was also more stable across runs, consistently achieving over 0.72 accuracy and resisting overfitting for longer.
 
 
 \begin{table}[h!]
@@ -181,7 +177,7 @@ RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it
 
 		\hline
 	\end{tabular}
-	\caption{Base Model performance comparison across different transformer architectures for binary inference on the "manipulative" column: Epochs before significant over-fitting, Training loss / Validation loss (to measure  overfitting) and accuracy at epoch and final classification }
+	\caption{Base Model performance comparison across different transformer architectures for binary inference on the "manipulative" column: Epochs before significant over-fitting, Training loss/Validation loss (to measure  overfitting) and accuracy at epoch and final classification }
 	\label{tab:BaseModelPerformance}
 \end{table}
 
@@ -198,30 +194,30 @@ To further improve classification efficiency, we unfroze layers 6 through11 in t
 	\small
 	\begin{tabular}{|p{2.2cm}|p{1cm}|p{1cm}|p{1cm}|c|c|c|}
 		\hline
-		\textbf{Class}        & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} \\
+		\textbf{Class}      & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} \\
 
 		\hline
-		Non-manip.            & 0.52           & 0.23          & 0.32        & 236           \\
+		Non-manip.          & 0.52           & 0.23          & 0.32        & 236           \\
 		\hline
-		Manipulative          & 0.74           & 0.91          & 0.82        & 564           \\
+		Manipulative        & 0.74           & 0.91          & 0.82        & 564           \\
 		\hline
 		\hline
-		\textbf{Accuracy}     &                &               & 0.71        & 800           \\
+		\textbf{Accuracy}   &                &               & 0.71        & 800           \\
 		\hline
-		\textbf{Macro Avg}    & 0.63           & 0.57          & 0.57        & 800           \\
+		\textbf{Macro Avg}  & 0.63           & 0.57          & 0.57        & 800           \\
 		\hline
-		\textbf{Weighted Avg} & 0.67           & 0.71          & 0.67        & 800           \\
+		\textbf{Weigt. Avg} & 0.67           & 0.71          & 0.67        & 800           \\
 		\hline
 	\end{tabular}
 	\caption{Classification report: non-manipulative vs manipulative for the fine tuned RoBERTa model}
 \end{table}
-\subsection{Experiments}
+\section{Persuasion}
 Persuasion is expected to be the main technique in phishing, where the aim is to get people to take some action on behalf of the attacker. Therefore we will focus on the 'persuasion' label in our experiments.
 
-\subsubsection{Persuasion - Feature Engineering}
+\subsection{Persuasion - Feature Engineering}
 The 'technique' column in the data set was chosen as binary label, with 'persuasion' present in the text being the positive class (some rows have multiple technique labels). The label distribution is 4.2 to 1 for the 'non-persuasion' to 'persuasion' labels, i.e. near the opposite of the data sets 'manipulative' vs 'not' when including all techniques and vulnerabilities.
 
-\subsubsection{Results and Discussion, Persuasion}
+\subsection{Results and Discussion, Persuasion}
 Classification Report for the 'Persuasion' label, Base Case un-weighted is shown in Table \ref{tab:BaseCasePersuasionReport}. At a glance, the model shows decent overall accuracy (0.80), However as we are interested in identifying persuasion the important metrics are recall and precision for the 'Manipulative' class, here the results are not so impressive, out of all actual manipulative instances, only 28\% were correctly predicted as manipulative (confusion matrix and results are shown in appendix \ref{fig:UNWeightedResults}). The cause for the models difficulty identifying persuasion is assumed to be the skewed label distribution.
 
 \begin{table}[h!]
@@ -296,7 +292,7 @@ The SpamAssassin.csv file contained 5809 records and only 1718 out of them were 
 
 The data in these two files was not in dialogue form, unlike the format used during initial model training. Instead, they consisted of standalone emails, which may lack the turn-taking structure or conversational cues that the model was originally optimized to interpret. Additionally, both datasets were imbalanced, with manipulative records making up a relatively small percentage of the total. These two factors—format mismatch and class imbalance—likely contributed to the model’s lower accuracy. To improve performance on such data, a two-stage approach could be effective: the first model prioritizes high recall to ensure most manipulative messages are identified, while the second model focuses on improving precision by filtering out false positives. This cascaded strategy could help strike a better balance between sensitivity and specificity, ultimately improving overall reliability for real-world application.
 
- 
+
 
 Perhaps, a two stage model - one that focusses on high recall and second which is precision focussed can help to improve overall accuracy for these datasets.
 
@@ -357,6 +353,13 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 		\includegraphics[width=0.5\textwidth]{ManipulationRatio.png}
 		\caption{Ratio of manipulation to non-manipulation in the $MentalManip_{maj}$ Dataset}
 		\label{fig:ManipulationRatio}
+	\end{figure}
+
+	\begin{figure}[!htp] % Single column :figure	
+		\centering
+		\includegraphics[width=0.5\textwidth]{TechniqueCoOcurrence.png}
+		\caption{Distribution and Co-ocurrence of 'Manipulation Technique' labels}
+		\label{fig:TechCoOcurrence}
 	\end{figure}
 
 
