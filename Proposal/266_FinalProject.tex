@@ -55,25 +55,28 @@ Phishing Attacks
 
 % Authors are listed in a comma-separated list with superscript numbers indicating affiliations
 % \thanks{} is used for any text that should be placed in a footnote on the first page, such as the corresponding author's email, journal acceptance dates, a copyright/license notice, keywords, etc
-\author{
-	Karl-Johan Westhoff \\
-	email: \href{mailto:kjwesthoff@berkeley.edu}{kjwesthoff@berkeley.edu} \\
-    Neha Dhage \\
+\author{\small
+	Karl-Johan Westhoff 
+	email: \href{mailto:kjwesthoff@berkeley.edu}{kjwesthoff@berkeley.edu} \\ 
+    \small Neha Dhage 
 	email: \href{mailto:neha_dhage@ischool.berkeley.edu}{neha\_dhage@ischool.berkeley.edu}
 }
 
 
 % Affiliations are output in the \date{} command
-\date{UC Berkeley School of Information \\
+\date{\small UC Berkeley School of Information \\
 MIDS Course 266 Summer 2025 Section 2 (Natalie Ahn) \\
 }
 
-% % Full-width abstract
-% \renewcommand{\maketitlehookd}{%
-% 	\begin{abstract}
-% 		\noindent Lorem ipsum dolor sit amet,rta porttitor.
-% 	\end{abstract}
-% }
+ % Full-width abstract
+ \renewcommand{\maketitlehookd}{%
+ 	\begin{abstract}
+ 		\noindent 
+
+This project investigates the use of transformer-based NLP models to detect manipulative language in LLM-generated phishing emails. Using the MentalManip dataset, we fine-tuned multiple models, with RoBERTa achieving the highest accuracy (0.73) for binary classification of manipulative dialogue. Further experiments targeted the "persuasion" sublabel and applied weighted loss to address class imbalance, improving recall but increasing false positives. When applied to real-world phishing emails, the models showed high sensitivity but poor precision, likely due to format mismatch and limited training data. Results highlight challenges in generalizing manipulation detection, manipulation detection is difficult even for humans.
+
+\end{abstract}
+ }
 
 %----------------------------------------------------------------------------------------
 \setcounter{tocdepth}{5}
