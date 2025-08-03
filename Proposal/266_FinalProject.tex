@@ -293,7 +293,13 @@ The Ling.csv file contained 2859 records and only 458 out of them were manipulat
 
 The SpamAssassin.csv file contained 5809 records and only 1718 out of them were manipulative. We got the overall accuracy of 0.43 for identifying manipulative with precision of 0.33, recall of 0.92 and F1-score of 0.49. The dataset was still moderately imbalanced with less manipulative records. The results were only slightly different from what we observed with the Ling.csv file. Our model was over-sensitive to detecting manipulative language (high recall) but struggled to identify them correctly (low precision) and overall classification ability is weak.
 
+
+The data in these two files was not in dialogue form, unlike the format used during initial model training. Instead, they consisted of standalone emails, which may lack the turn-taking structure or conversational cues that the model was originally optimized to interpret. Additionally, both datasets were imbalanced, with manipulative records making up a relatively small percentage of the total. These two factors—format mismatch and class imbalance—likely contributed to the model’s lower accuracy. To improve performance on such data, a two-stage approach could be effective: the first model prioritizes high recall to ensure most manipulative messages are identified, while the second model focuses on improving precision by filtering out false positives. This cascaded strategy could help strike a better balance between sensitivity and specificity, ultimately improving overall reliability for real-world application.
+
+ 
+
 Perhaps, a two stage model - one that focusses on high recall and second which is precision focussed can help to improve overall accuracy for these datasets.
+
 
 \section{Conclusion}
 
