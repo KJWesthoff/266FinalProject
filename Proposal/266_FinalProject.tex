@@ -185,7 +185,7 @@ RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it
 	\label{tab:BaseModelPerformance}
 \end{table}
 
-\section{Fine Tuning}
+\section{Fine Tuning and Experiments}
 Based on the results in section \ref{sec:BaselineResults}, we decided to fine tune the RoBERTa model with the $MentalManip_{maj}$ data set to see if we can get better results for the manipulation detection task. The MentalManip article\cite{MentalManip} achieved an accuracy of 0.78.
 
 \subsection{LoRA/PEFT}
@@ -193,21 +193,10 @@ To improve the training efficiency, LoRA was used on the RoBERTa model with para
 
 To further improve classification efficiency, we unfroze layers 6 through11 in the RoBERTa model. Freezing these layers helps to capture interactions between words and phrases in context (6 through8) and encodes high-level semantic and task-relevant abstractions  (words' meaning and why it matters)(9 through 11). We obtained the overall accuracy of .74 when only layers 10 and 11 were unfrozen. 
 
-
-
-\subsection{Hyper parameters}
-
-
-
-
-
-
-
-\section{Experiments}
+\subsection{Experiments}
 Persuasion is expected to be the main technique in phishing, where the aim is to get people to take some action on behalf of the attacker. Therefore we will focus on the 'persuasion' label in our experiments.
 
-\subsection{Persuasion}
-\subsubsection{Feature Engineering}
+\subsubsection{Persuasion - Feature Engineering}
 The 'technique' column in the data set was chosen as binary label, with 'persuasion' present in the text being the positive class (some rows have multiple technique labels). The label distribution is 4.2 to 1 for the 'non-persuasion' to 'persuasion' labels, i.e. near the opposite of the data sets 'manipulative' vs 'not' when including all techniques and vulnerabilities.
 
 \subsubsection{Results and Discussion, Persuasion}
@@ -276,7 +265,7 @@ An observed feature during training, shown in Figure \ref{fig:V1EpochPlot}, epoc
 \end{figure}%
 
 \section{Phishing Detection}
-We further used the model with LoRA and layers 9 - 11 frozen to execute inference on Phishing email data we obtained from Kaggle. \cite{PhishingEmailDataset}  This dataset included 7 different files of data. We picked two that were in English (Ling.csv and SpamAssasin.csv). They included body of the phishing email and data was labeled to indicate the binary classification between manipulative and non-manipulative. 
+We further used the model with LoRA and layers 9 - 11 frozen to execute inference on Phishing email data we obtained from Kaggle. \cite{naser_abdullah_alam_2024}  This dataset included 7 different files of data. We picked two that were in English (Ling.csv and SpamAssasin.csv). They included body of the phishing email and data was labeled to indicate the binary classification between manipulative and non-manipulative. 
 
 The Ling.csv file contained 2859 records and only 458 out of them were manipulative. We got the overall accuracy of 0.29 for identifying manipulative with precision of 0.18, recall of 0.96 and F1-score of 0.30. The dataset was imbalanced with less manipulative records. The results show that our model was over-sensitive to detecting manipulative language and rarely missed identifying manipulative cases(high recall) but also flagged too many non-manipulative cases as well (low precision).  
 
