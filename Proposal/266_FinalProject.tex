@@ -301,7 +301,6 @@ Perhaps, a two stage model - one that focusses on high recall and second which i
 The baseline investigations showed that applying the $MentalManip$ dataset to models optimized for emotional language detection does not automatically improve accuracy. Mental manipulation is less explored in literature than hate speech and abusive language, which are key concerns in social media, where sentiment analysis is both established and evolving in NLP, using these models do not directly translate to improvement in detecting manipulation. \\
 Investigating 'persuasion' as a means for detecting Phishing, requires some model manipulation as we are trying to detect a minority class, and the results show moderate (at best) viability for detecting persuasion.
 
-The MentalManip article \cite{MentalManip} also uses some decoder only models by 'zero' and 'few-shot' prompting the model with random example from the data set. This seems to perform better for overall binary classification, but only a little, and the LLM's have a tendency to pick up on toxicity and hate-speech and identify these as manipulation.
 \\
 Several factors may explain the models’ poor performance on the phishing dataset. The training data is based on movie dialogues, while the phishing data consists of single emails. The dataset is also small and unbalanced. This study underscores the importance of handling class imbalance, domain adaptation, and layered model design -- and that detecting manipulation is simply hard, also for humans.
 
