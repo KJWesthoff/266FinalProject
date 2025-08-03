@@ -300,7 +300,8 @@ Investigating 'persuasion' as a means for detecting Phishing, requires some mode
 
 The MentalManip article \cite{MentalManip} also uses some decoder only models by 'zero' and 'few-shot' prompting the model with random example from the data set. This seems to perform better for overall binary classification, but only a little, and the LLM's have a tendency to pick up on toxicity and hate-speech and identify these as manipulation.
 \\
-Several factors may explain the models’ poor performance on the phishing dataset. The training data is based on movie dialogues, while the phishing data consists of single emails. The dataset is also small, especially for the 'Persuasion' category only. Additionally, key contextual metadata—like target age, role, or company—is missing, yet often critical in real phishing attacks.
+Several factors may explain the models’ poor performance on the phishing dataset. The training data is based on movie dialogues, while the phishing data consists of single emails. The dataset is also small and unbalanced. This study underscores the importance of handling class imbalance, domain adaptation, and layered model design -- and that detecting manipulation is simply hard, also for humans.
+
 %--------------------------------------------------------  --------------------------------
 %	 REFERENCES
 %----------------------------------------------------------------------------------------
@@ -399,10 +400,14 @@ Several factors may explain the models’ poor performance on the phishing datas
 
 	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/Data-Exploration_MentalManip.ipynb}
 
+
 	\section{BaseCaseModels}\label{appendix:BaseCaseModels}
 	Notebook here: \\
 	\url{https://github.com/KJWesthoff/266FinalProject/tree/main/BaseCaseModels}
 
+
+
+	\clearpage
 	\section{'Persuasion' Experiments}\label{appendix:PersuasionExperiments}
 	\subsection{Label distribution}\label{appendix:PersuasionLabelDistribution}
 	\begin{figure}[!htp] % Single column :figure	
@@ -455,7 +460,7 @@ Several factors may explain the models’ poor performance on the phishing datas
 	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV3.ipynb} \\
 
 
-	\begin{figure*}[t!]
+	\begin{figure*}[!htb]
 		\centering
 		\begin{subfigure}[t]{0.5\textwidth}
 			\centering
@@ -473,7 +478,7 @@ Several factors may explain the models’ poor performance on the phishing datas
 		\caption{Results for cross entropy weight capped at 4.0}
 	\end{figure*}
 
-	\begin{figure*}[t!]
+	\begin{figure*}[!htb]
 		\centering
 		\begin{subfigure}[t]{0.5\textwidth}
 			\centering
@@ -490,12 +495,22 @@ Several factors may explain the models’ poor performance on the phishing datas
 		\end{subfigure}
 		\caption{Results for cross entropy weight capped at 3.0}
 	\end{figure*}
-
+	\clearpage
+	\section{Fine Tuning Notebooks}
+	Notebooks here: \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_LoRA_Freeze%20layer)_10-11_Integrated.ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_LoRA_Freeze%20layer)_6-through-11_Integrated.ipynb}\\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_LoRA_Freeze%20layer)_8-9-10-11_Integrated.ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_LoRA_Freeze%20layer)_8-9_Integrated.ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_LoRA_Integrated%20(1).ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_PEFT.ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/RoBERTa_Binary_ManipDetection_PEFT_rev2.ipynb} \\
 
 
 	\clearpage
 	\section{Dialogue examples, Persuasion Detection}\label{appendix:DialogueExamples}
 	Code Here: \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV1d.ipynb}
 	\subsection{True Positives:}
 	{\ttfamily \tiny
 		\noindent\textbf{Person1:}  You're making it too easy. \\
@@ -564,7 +579,8 @@ Several factors may explain the models’ poor performance on the phishing datas
 	}
 
 	\section{Phishing Detection Attempts Text, Ling}\label{appendix:ling}
-
+	Code Here: \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/SpamAssasin/inferenceKJ_edit1_PostProc.ipynb}
 	\subsection{True Positives:}
 	{\ttfamily \tiny
 		\noindent\textbf{Mail-1:} greetings , this email is about fighting spam , and winning . > > please forward to your friends , family and co-workers to people that want to get spam out of their email : read this , you ' ll like what i am doing . . . . : ) to people that want to flame me for whatever reason : do n't be an egomaniac , i have a right to free speech , and the right to say it to a lot of people , so buzz off . - - - - - first let me tell you who i am and what i do . my name is robert young , i \\
@@ -602,7 +618,9 @@ Several factors may explain the models’ poor performance on the phishing datas
 	}
 
 	\section{Phishing Detection Attempts Text, SpamAssassin}\label{appendix:spamassassin}
-
+	Code Here: \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/FineTuning/SpamAssasin/inferenceKJ_edit1_PostProc.ipynb}
+	\
 	\subsection{True Positives:}
 	{\ttfamily \tiny
 		\noindent\textbf{Mail-1:} Dear Consumers, Increase your Business Sales!
