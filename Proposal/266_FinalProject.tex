@@ -119,12 +119,6 @@ The dataset was manually labeled through a three-step human annotation process u
 \subsection{Labels}
 The dataset uses a complex labeling system based on the taxonomy in Figure \ref{fig:Taxonomy}, with uneven label distribution—‘Manipulative’ appears 2.4× more than ‘Non-manipulative’. Some 'Technique' and 'Vulnerability' fields have multiple or missing values.  See details in Appendix \ref{appendix:Labels}. For phishing detection the most frequent label, ‘Persuasion and Seduction’, seemed most interesting (the aim is to get people to take some action on behalf of the attacker) though this creates class imbalance (4.2× more negatives than positives).
 
-
-
-
-
-
-
 \section{Baselines}
 Given the short embeddings (see Appendix \ref{appendix:DataExploration}), basic BERT models are sufficient for the data. Due to label inconsistencies, we will focus on binary classification of 'Presence of Manipulation' as the baseline for further experimentation.
 
@@ -144,7 +138,6 @@ Furthermore some "emotionally wiser" BERT derivatives exist which are pre-traine
 	\item EmotionBERT \cite{EmotionBERT}
 \end{itemize}
 
-
 \subsection{Baseline Results and Discussion}\label{sec:BaselineResults}
 
 Baseline results are shown in Table \ref{tab:BaseModelPerformance}. Most models overfit after a few epochs, which is typical for fine-tuning pre-trained models. Accuracy ranged from 0.70 to 0.72 with limited variation. Model details are in Appendix \ref{appendix:BaseCaseModels}.
@@ -161,7 +154,6 @@ DestilBERT and DeBERTa\_v3\_small didn’t outperform RoBERTa and required more 
 \subsubsection{RoBERTa}
 RoBERTa performed best, slightly outperforming BERT-base. It was also more stable across runs, consistently achieving over 0.72 accuracy and resisting overfitting for longer.
 
-
 \begin{table}[h!]
 	\small
 	\begin{tabular}{|p{2.2cm}|p{0.9cm}|p{1cm}|p{1cm}|p{1cm}|}
@@ -175,8 +167,6 @@ RoBERTa performed best, slightly outperforming BERT-base. It was also more stabl
 		ModernBERT     & 2              & 0.81              & 0.718              & 0.72               \\
 		BERTweet       & 2              & 0.97              & 0.705              & 0.70               \\
 		EmotionBERT    & 2              & 1.04              & 0.712              & 0.74               \\
-
-
 		\hline
 	\end{tabular}
 	\caption{Base Model performance comparison across different transformer architectures for binary inference on the "manipulative" column: Epochs before significant over-fitting, Training loss/Validation loss (to measure  overfitting) and accuracy at epoch and final classification }
