@@ -114,8 +114,7 @@ Wang et al. \cite{MentalManip} introduced the "MentalManip" dataset, published o
 The dataset was manually labeled through a three-step human annotation process using an adapted taxonomy (Figure \ref{fig:Taxonomy}). This resulted in two versions: one based on majority agreement (“$MentalManip_{maj}$”) and one on full consensus (“$MentalManip_{con}$”). We used $MentalManip_{maj}$, which has 4000 rows, to leverage its larger size for training. Dialogues were trimmed to fit within BERT’s 512-token limit. Data exploration is in Appendix \ref{appendix:DataExploration}.
 
 \subsection{Labels}
-The dataset uses a complex labeling system based on the taxonomy in Figure \ref{fig:Taxonomy}, with uneven label distribution—‘Manipulative’ appears 2.4× more than ‘Non-manipulative’. Some 'Technique' and 'Vulnerability' fields have multiple or missing values.  See details in Appendix \ref{appendix:Labels}. For phishing detection the most frequent label, ‘Persuasion and Seduction’, seemed most interesting though this creates class imbalance (4.2× more negatives than positives).
-
+The dataset uses a complex labeling system based on the taxonomy in Figure \ref{fig:Taxonomy}, with uneven label distribution—‘Manipulative’ appears 2.4× more than ‘Non-manipulative’. Some 'Technique' and 'Vulnerability' fields have multiple or missing values.  See details in Appendix \ref{appendix:Labels}. For phishing detection the most frequent label, ‘Persuasion and Seduction’, seemed most interesting (the aim is to get people to take some action on behalf of the attacker) though this creates class imbalance (4.2× more negatives than positives).
 
 
 
@@ -211,14 +210,14 @@ To further improve classification efficiency, we unfroze layers 6 through11 in t
 	\end{tabular}
 	\caption{Classification report: non-manipulative vs manipulative for the fine tuned RoBERTa model}
 \end{table}
-\section{Persuasion}
-Persuasion is expected to be the main technique in phishing, where the aim is to get people to take some action on behalf of the attacker. Therefore we will focus on the 'persuasion' label in our experiments.
 
-\subsection{Persuasion - Feature Engineering}
-The 'technique' column in the data set was chosen as binary label, with 'persuasion' present in the text being the positive class (some rows have multiple technique labels). The label distribution is 4.2 to 1 for the 'non-persuasion' to 'persuasion' labels, i.e. near the opposite of the data sets 'manipulative' vs 'not' when including all techniques and vulnerabilities.
+\section{Persuasion}
+The 'technique' column in the data set was chosen with binary label '1' with 'persuasion' being present. The label distribution is 4.2 to 1 for the 'non-persuasion' to 'persuasion' labels, i.e. near the opposite of the data sets 'manipulative' vs 'not' when including all techniques and vulnerabilities.
 
 \subsection{Results and Discussion, Persuasion}
-Classification Report for the 'Persuasion' label, Base Case un-weighted is shown in Table \ref{tab:BaseCasePersuasionReport}. At a glance, the model shows decent overall accuracy (0.80), However as we are interested in identifying persuasion the important metrics are recall and precision for the 'Manipulative' class, here the results are not so impressive, out of all actual manipulative instances, only 28\% were correctly predicted as manipulative (confusion matrix and results are shown in appendix \ref{fig:UNWeightedResults}). The cause for the models difficulty identifying persuasion is assumed to be the skewed label distribution.
+
+The classification report for the 'Persuasion' label (Table \ref{tab:BaseCasePersuasionReport}) shows overall accuracy of 0.80. However, key metrics—precision and recall for the 'Manipulative' class—are low. Only 28\% of actual manipulative cases were correctly identified (see confusion matrix in Appendix \ref{fig:UNWeightedResults}). This is likely due to the skewed label distribution.
+
 
 \begin{table}[h!]
 	\small
@@ -244,17 +243,13 @@ Classification Report for the 'Persuasion' label, Base Case un-weighted is shown
 \end{table}
 
 \subsection{Weighted loss function}
+To address label imbalance, we applied class weights to the loss function—penalizing the majority class and boosting the minority. Under-sampling was ruled out due to the small dataset (4,000 rows), and oversampling was avoided to prevent overfitting from repeated samples. Zhang et al. \cite{zhang2020revisiting} found loss weighting more effective than sampling when fine-tuning BERT on imbalanced data.
 
-To remedy the skewed label distribution, a suggested approach is adding weights to the loss function, suppressing the majority and boosting the minority class. Alternatives are over- and under-sampling. Under-sampling was disregarded due to the limited dataset size of 4,000 rows, as it would further reduce the available training data and risk losing information. Oversampling was considered but ultimately avoided to prevent overfitting, particularly since duplicating minority samples can lead the model to remember specific sentences. Zhang et al. \cite{zhang2020revisiting} suggests that weighting the loss function is more effective than sampling when fine-tuning BERT on imbalanced data. \\
-
-Weights are calculated based on the label distribution and applied to the cross-entropy loss function during training\footnote{A custom derivative of the Trainer class was implemented, see links to notebooks in Appendix \ref{appendix:WeightedResults}}. We tried a number of schemes to determine weights:
+Weights, based on label distribution, were applied to the cross-entropy loss function \footnote{See links to notebooks in Appendix \ref{appendix:WeightedResults}}. We tested several schemes:
 \begin{enumerate}
-	\item Weights inversely proportional to the class distribution, see Figure \ref{fig:V1WeightDistributionRaw}
-	\item Weights inversely proportional to the class distribution but max weight capped at 4.0 and 3.0 respectively
-	\item Weights normalized to add up to 1
+	\item Inverse class distribution (Figure \ref{fig:V1WeightDistributionRaw})
+	\item Inverse distribution with max weights capped at 4.0 and 3.0
 \end{enumerate}
-
-
 
 \begin{figure}[h]
 	\centering
@@ -272,8 +267,8 @@ Weights are calculated based on the label distribution and applied to the cross-
 \end{figure}%
 
 \subsubsection{Results and Discussion, Weighted Models}
-The un-capped un-normalized option 1 version performed best, Results are shown in Figure \ref{fig:V1WeightResultsRaw}. Option 1 adds the most weight to the minority class and gives a recall of 0.5 for the 'Manipulative' class improving the un-weighted result in Table \ref{tab:BaseCasePersuasionReport}, however the model still only gets 38\% of the manipulative cases correct, with high false positives. Results for option 2 and 3 give slightly lower recalls in proportion to the lower weights added to the minority label and better overall Accuracy results (favoring the non manipulative class). Results are shown in Appendix \ref{appendix:WeightedResults}. \\
-An observed feature during training, shown in Figure \ref{fig:V1EpochPlot}, epochs 2-4 with decreasing training loss, increasing validation loss while F1 and recall scores still show a positive trend. This is likely due to the model over fitting the majority class, however for this application we are interested in the minority class, so recall and F1 are better metrics for detecting "over fitting of the minority class".
+The un-capped un-normalized option 1 version performed best, Results are shown in Figure \ref{fig:V1WeightResultsRaw}. Option 1 adds the most weight to the minority class and gives a recall of 0.5 for the 'Manipulative' class improving the un-weighted result in Table \ref{tab:BaseCasePersuasionReport}, however the model still only gets 38\% of the manipulative cases correct, with high false positives. Results for option 2 give slightly lower recalls in proportion to the lower weights added to the minority label and better overall Accuracy results (favoring the non manipulative class). Results are shown in Appendix \ref{appendix:WeightedResults}. \\
+An observed feature during training, shown in Figure \ref{fig:V1EpochPlot}, epochs 2-4 with decreasing training loss, increasing validation loss while F1 and recall scores still show a positive trend. This is likely due to the model over fitting the majority class, however for this application we are interested in the minority class, so recall and F1 are better metrics for detecting "over fitting" of the minority class.
 
 \begin{figure}[h]
 	\centering
