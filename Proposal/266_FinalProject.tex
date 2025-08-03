@@ -189,10 +189,32 @@ RoBERTa is the best-performing model in Table \ref{tab:BaseModelPerformance}, it
 Based on the results in section \ref{sec:BaselineResults}, we decided to fine tune the RoBERTa model with the $MentalManip_{maj}$ data set to see if we can get better results for the manipulation detection task. The MentalManip article\cite{MentalManip} achieved an accuracy of 0.78.
 
 \subsection{LoRA/PEFT}
-To improve the training efficiency, LoRA was used on the RoBERTa model with parameters that will only inject lightweight, low rank trainable adaptors applied to the attention mechanism, optimize for classification task, and add regularization. This was done to get task-specific learning with minimal memory footprint and strong generalization. The final accuracy of classification was .69 slightly less than the accuracy without LoRA applied (.73). 
+To improve the training efficiency, LoRA was used on the RoBERTa model with parameters that will only inject lightweight, low rank trainable adaptors applied to the attention mechanism, optimize for classification task, and add regularization. This was done to get task-specific learning with minimal memory footprint and strong generalization. The final accuracy of classification was .69 slightly less than the accuracy without LoRA applied (.73).
 
-To further improve classification efficiency, we unfroze layers 6 through11 in the RoBERTa model. Freezing these layers helps to capture interactions between words and phrases in context (6 through8) and encodes high-level semantic and task-relevant abstractions  (words' meaning and why it matters)(9 through 11). We obtained the overall accuracy of .74 when only layers 10 and 11 were unfrozen. 
+To further improve classification efficiency, we unfroze layers 6 through11 in the RoBERTa model. Freezing these layers helps to capture interactions between words and phrases in context (6 through8) and encodes high-level semantic and task-relevant abstractions  (words' meaning and why it matters)(9 through 11). We obtained the overall accuracy of .74 when only layers 10 and 11 were unfrozen.
 
+\begin{table}[h!]
+	\centering
+	\small
+	\begin{tabular}{|p{2.2cm}|p{1cm}|p{1cm}|p{1cm}|c|c|c|}
+		\hline
+		\textbf{Class}        & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{Sup.} \\
+
+		\hline
+		Non-manip.            & 0.52           & 0.23          & 0.32        & 236           \\
+		\hline
+		Manipulative          & 0.74           & 0.91          & 0.82        & 564           \\
+		\hline
+		\hline
+		\textbf{Accuracy}     &                &               & 0.71        & 800           \\
+		\hline
+		\textbf{Macro Avg}    & 0.63           & 0.57          & 0.57        & 800           \\
+		\hline
+		\textbf{Weighted Avg} & 0.67           & 0.71          & 0.67        & 800           \\
+		\hline
+	\end{tabular}
+	\caption{Classification report: non-manipulative vs manipulative for the fine tuned RoBERTa model}
+\end{table}
 \subsection{Experiments}
 Persuasion is expected to be the main technique in phishing, where the aim is to get people to take some action on behalf of the attacker. Therefore we will focus on the 'persuasion' label in our experiments.
 
@@ -265,20 +287,20 @@ An observed feature during training, shown in Figure \ref{fig:V1EpochPlot}, epoc
 \end{figure}%
 
 \section{Phishing Detection}
-We further used the model with LoRA and layers 9 - 11 frozen to execute inference on Phishing email data we obtained from Kaggle. \cite{naser_abdullah_alam_2024}  This dataset included 7 different files of data. We picked two that were in English (Ling.csv and SpamAssasin.csv). They included body of the phishing email and data was labeled to indicate the binary classification between manipulative and non-manipulative. 
+We further used the model with LoRA and layers 9 - 11 frozen to execute inference on Phishing email data we obtained from Kaggle. \cite{naser_abdullah_alam_2024}  This dataset included 7 different files of data. We picked two that were in English (Ling.csv and SpamAssasin.csv). They included body of the phishing email and data was labeled to indicate the binary classification between manipulative and non-manipulative.
 
-The Ling.csv file contained 2859 records and only 458 out of them were manipulative. We got the overall accuracy of 0.29 for identifying manipulative with precision of 0.18, recall of 0.96 and F1-score of 0.30. The dataset was imbalanced with less manipulative records. The results show that our model was over-sensitive to detecting manipulative language and rarely missed identifying manipulative cases(high recall) but also flagged too many non-manipulative cases as well (low precision).  
+The Ling.csv file contained 2859 records and only 458 out of them were manipulative. We got the overall accuracy of 0.29 for identifying manipulative with precision of 0.18, recall of 0.96 and F1-score of 0.30. The dataset was imbalanced with less manipulative records. The results show that our model was over-sensitive to detecting manipulative language and rarely missed identifying manipulative cases(high recall) but also flagged too many non-manipulative cases as well (low precision).
 
 The SpamAssassin.csv file contained 5809 records and only 1718 out of them were manipulative. We got the overall accuracy of 0.43 for identifying manipulative with precision of 0.33, recall of 0.92 and F1-score of 0.49. The dataset was still moderately imbalanced with less manipulative records. The results were only slightly different from what we observed with the Ling.csv file. Our model was over-sensitive to detecting manipulative language (high recall) but struggled to identify them correctly (low precision) and overall classification ability is weak.
 
-Perhaps, a two stage model - one that focusses on high recall and second which is precision focussed can help to improve overall accuracy for these datasets. 
+Perhaps, a two stage model - one that focusses on high recall and second which is precision focussed can help to improve overall accuracy for these datasets.
 
 \section{Conclusion}
 
 The baseline investigations showed that applying the $MentalManip$ dataset to models optimized for emotional language detection does not automatically improve accuracy. Mental manipulation is less explored in literature than hate speech and abusive language, which are key concerns in social media, where sentiment analysis is both established and evolving in NLP, using these models do not directly translate to improvement in detecting manipulation. \\
 Investigating 'persuasion' as a means for detecting Phishing, requires some model manipulation as we are trying to detect a minority class, and the results show moderate (at best) viability for detecting persuasion.
 
-The MentalManip article \cite{MentalManip} also uses some decoder only models by 'zero' and 'few-shot' prompting the model with random example from the data set. This seems to perform better for overall binary classification, but only a little, and the LLM's have a tendency to pick up on toxicity and hate-speech and identify these as manipulation. 
+The MentalManip article \cite{MentalManip} also uses some decoder only models by 'zero' and 'few-shot' prompting the model with random example from the data set. This seems to perform better for overall binary classification, but only a little, and the LLM's have a tendency to pick up on toxicity and hate-speech and identify these as manipulation.
 
 
 %----------------------------------------------------------------------------------------
@@ -332,7 +354,7 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 	\end{figure}
 
 
-        \begin{figure}[!htp] % Single column :figure	
+	\begin{figure}[!htp] % Single column :figure	
 		\centering
 		\includegraphics[width=0.5\textwidth]{VulnerabilityCoOcurrence.png}
 		\caption{Co ocurrence of the Vulnerability column in the data $MentalManip_{maj}$ Dataset}
@@ -357,6 +379,7 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/Data-Exploration_MentalManip.ipynb}
 
 	\section{BaseCaseModels}\label{appendix:BaseCaseModels}
+	Notebook here: \\
 	\url{https://github.com/KJWesthoff/266FinalProject/tree/main/BaseCaseModels}
 
 	\section{'Persuasion' Experiments}\label{appendix:PersuasionExperiments}
@@ -370,7 +393,7 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 
 
 	\subsection{Baseline Results, Un-Weighted}\label{appendix:UnWeightedResults}
-	Notebook here:
+	Notebook here: \\
 	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_Un-Weighted.ipynb}
 
 
@@ -404,10 +427,11 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 
 
 	\subsection{Baseline Results, Weighted}\label{appendix:WeightedResults}
-	Notebooks here:
-	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV1.ipynb}
-	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV2.ipynb}
-	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV3.ipynb}
+
+	Notebooks here: \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV1.ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV2.ipynb} \\
+	\url{https://github.com/KJWesthoff/266FinalProject/blob/main/WeightedSkew/RoBERTa_Binary_ManipDetection_PersuasionBinary_WeightedV3.ipynb} \\
 
 
 	\begin{figure*}[t!]
@@ -465,7 +489,7 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 		\caption{Results for normalized weighted cross-entropy loss function}
 	\end{figure*}
 	\clearpage
-	\section{Dialogue examples}\label{appendix:DialogueExamples}
+	\section{Dialogue examples, Persuasion Detection}\label{appendix:DialogueExamples}
 	\subsection{True Positives:}
 	{\ttfamily \tiny
 		\noindent\textbf{Person1:}  You're making it too easy. \\
@@ -533,8 +557,154 @@ The MentalManip article \cite{MentalManip} also uses some decoder only models by
 
 	}
 
+	\section{Phishing Detection Attempts Text, Ling}\label{appendix:ling}
+
+	\subsection{True Positives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} greetings , this email is about fighting spam , and winning . > > please forward to your friends , family and co-workers to people that want to get spam out of their email : read this , you ' ll like what i am doing . . . . : ) to people that want to flame me for whatever reason : do n't be an egomaniac , i have a right to free speech , and the right to say it to a lot of people , so buzz off . - - - - - first let me tell you who i am and what i do . my name is robert young , i \\
+
+		\noindent\textbf{Mail-1:} just released . . . 27 , 000 , 000 email addresses ! plus 12 bonuses . . . including free bulk e . mail software . these addresses are less than 21 days old . earn insane profits with the right formula if you have a product , service , or message that you would like to get out to thousands , hundreds of thousands , or even millions of people , you have several options . traditional methods include print advertising , direct mail , radio , and television advertising . they are all effective , but they all have two catches : they ' re expensive and time consuming . not only that , you only get one shot at making your message \\
 
 
+	}
+
+	\subsection{False Negatives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} discover your family history - rated " cool site of the week " come visit our website at , http : / / www . vpm . com / hallofnames / index . htm free search = 09 do you know who your ancestors are and what they did ? do you know when your surname first appeared ? are you curious about where your family roots originate ? now you can fill in the missing pieces of this puzzle . join the satisfied multitudes who have discovered their complete family = surname history . all nationalities . it 's easy . just key your last name into our online = index , and in seconds we will \\
+
+		\noindent\textbf{Mail-1:} discover your family history come visit our website at , http : / / www . traceit . com free search do you know who your ancestors are and what they did ? do you know when your surname first appeared ? are you curious about where your family roots originate ? now you can fill in the missing pieces of this puzzle . join the satisfied multitudes who have discovered their complete family surname history . all nationalities . it 's easy . just key your last name into our online index , and in seconds we will tell you it 's origin and much more . see if we ' ve researched your complete family name history during \\
+
+
+	}
+
+	\subsection{False Positives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} istituto mitteleuropeo di cultura - mitteleuropaeisches kulturinstitut bisca-98 bolzano international school in cognitive analysis unfolding perceptual continua bolzano , september 7-11 recent problems raised by cognitive science , such as the perception of forms , the recognition of natural languages , the problems of common sense , na \ 239ve physics , and consequently the need for direct and non-propositional reference to the objects of experience - as cited , for example by scientists working in robotics - has proposed new areas of inquiry for psychophysics . \\
+
+		\noindent\textbf{Mail-1:} hello , does anybody happen to know of languages ( other than albanian and macedonian ) which display obligatory clitic doubling of ( either accusative or dative ) dps ? any reference will be appreciated . please , write to me directly at : dalina . kallulli @ avh . unit . no thank you ! dalina kallulli \\
+
+
+	}
+
+	\subsection{True Negatives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} i would like to place a large bet that chomsky is by far the most cited linguist in the postings to the linguist list . . . \\
+
+		\noindent\textbf{Mail-1:} forgive me if i missed this , but in the earlier discussion of chomsky 's elevated position in the citations index , did anyone work out how many of the citations were for his linguistic works and how many were for his political works . i ask this out of general interest , and also because a colleague of mine is interested to know the extent of his stature in academic political studies . comments on the latter could be directed directly to me . \\
+
+
+	}
+
+	\section{Phishing Detection Attempts Text, SpamAssassin}\label{appendix:spamassassin}
+
+	\subsection{True Positives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} Dear Consumers, Increase your Business Sales!
+
+		How??
+
+		By targeting millions of buyers via e-mail !!
+
+		25 MILLION EMAILS + Bulk Mailing Software For Only \$150.00
+
+		super low price! ACT NOW !!!
+
+		Our Fresh Addresses Will Bring You
+
+		Incredible Results!
+
+
+
+		If you REALLY want to get the word out regarding
+
+		your services or products, Bulk Email is the BEST
+
+		way to do so, PERIOD! Advertising in newsgroups is
+
+		good but you're competing with hundreds even TH \\
+
+		\noindent\textbf{Mail-1:} Make 20% In 9 Months-Fully Secured!
+
+		Investor Alert:
+
+		Is the stock market roller coaster making you worried?
+		Join the flight to quality. Make 20% in 9 months!!!
+
+		Earn over 2% monthly through fully secured Accounts
+		Receivable Acquisitions-prepaid monthly in advance!!!
+
+		You heard right-over 2% monthly prepaid in advance!
+
+		Discover what banks have been doing for decades.
+
+		Harness the power \& liquidity of fully secured accounts
+		receivable acquisitions.
+
+		Look into our safe haven with a return of 20% in 9 months- \\
+
+
+	}
+
+	\subsection{False Negatives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} ATTN:SIR/MADAN
+
+		STRICTLY CONFIDENTIAL.
+
+		I am pleased to introduce myself  to you.My name is Mr. Manuel Oko a native of South Africa and a senior employee of mines and natural resources department currently on a trainning course in \\
+
+		\noindent\textbf{Mail-1:} --1715101671.1022782885778.JavaMail.root.smtp4 Content-Type: text/plain; charset=iso-8859-1 Content-Transfer-Encoding: 7bit O'Connor quickly moved his cursor down the left side of the web page. Then, showing a flash of his silky skills, he cut across to the right hand side and clicked on Top Ten Special Offers. He zipped past the Irish Chicken Breast Fillets at 25% off, nipped round the HB Selections ice cream also at 25% off and went on with the goal \\
+
+
+	}
+
+	\subsection{False Positives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} In a message dated Wed, 7 Aug 2002 5:17:55 PM Eastern Standard Time, beberg@mithral.com writes:
+
+		>
+		>
+		> On Wed, 7 Aug 2002, Robert Harley wrote:
+		>
+		> > Hmm... now I have an asymptotically faster precomputation algorithm
+		>
+		> Woo, faster is better... But what have you done about all those patents that
+		> prevent anyone from going near ECC in the first place,
+		> hmmmmmm?
+		>
+		> - Adam L. "Duncan" \\
+
+		\noindent\textbf{Mail-1:} >> > Well, I don't really find it consistent at all to use an rpm package  >> > built against something that wasn't installed through rpm :-\/  >>  >> Following that reasoning, I've been installing all my custom-built  >> kernels through rpm recently. I find it annoying, though, that  >> alsa-kernel, and similar packages, will only build for the currently  >> running kernel.  >>  >> So I've attached a patch to specify an alternate kernel by setting the  >> "TARGET_KERNEL" environment variable before running rpmbuild. You \\
+
+
+	}
+
+	\subsection{True Negatives:}
+	{\ttfamily \tiny
+		\noindent\textbf{Mail-1:} CAN-2002-0384  http://cve.mitre.org/cgi-bin/cvename.cgi?name=CAN-2002-0384
+		RHSA-2002-098  http://rhn.redhat.com/errata/RHSA-2002-098.html
+		Gaim Changelog http://gaim.sourceforge.net/ChangeLog
+
+		Gaim is an instant messaging client based on the published TOC
+		protocol from AOL. Versions of Gaim prior to 0.58 contain a buffer
+		overflow in the Jabber plug \\
+
+		\noindent\textbf{Mail-1:} Hi All,
+
+		I have a question which is a bit tricky and was
+		wondering of anyone has come across this problem
+		before or could point me in the right direction.
+
+		I am involved in porting a SCO unix application to
+		Linux, and we have encountered a problem with the way
+		semaphores  are being handled. The application uses
+		mulitple processes to run application code with the
+		main process known as the bsh which controls all i/o
+		be it screen, or file i/o, syncronisation is handled
+		via semaphores. \\
+
+
+	}
 \end{appendices}
 %
 \end{document}
